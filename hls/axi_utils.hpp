@@ -141,7 +141,8 @@ bool scan(std::istream& inputFile, ap_uint<D>& data)
 			return false;
 		}
 	}
-	return inputFile;
+	//return inputFile;
+	return true;
 }
 
 template<int D>
@@ -168,7 +169,8 @@ bool scan(std::istream& inputFile, net_axis<D>& word)
 	word.last = lastTemp;
 	//if (!inputFile)
 	//	std::cerr << "[ERROR]: could not scan input" << std::endl;
-	return inputFile;
+	return true;
+	//return inputFile;
 }
 
 template<int D>
@@ -187,7 +189,8 @@ bool scanLE(std::istream& inputFile, ap_uint<D>& data)
 			return false;
 		}
 	}
-	return inputFile;
+	//return inputFile;
+	return true;
 }
 
 template<int D>

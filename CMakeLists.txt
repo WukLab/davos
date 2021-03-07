@@ -65,11 +65,10 @@ if (NETWORK_BANDWIDTH STREQUAL "100")
 endif()
 
 
+# Network stack IPs
+add_subdirectory(submodules/fpga-network-stack)
 
-#Network stack IPs
-add_subdirectory(ext/network)
-
-#HLS IPs
+# HLS IPs
 add_subdirectory(hls/dma_bench)
 add_subdirectory(hls/ethernet_frame_padding)
 add_subdirectory(hls/ethernet_frame_padding_512)
@@ -77,7 +76,6 @@ add_subdirectory(hls/mem_cmd_data_merger_512)
 add_subdirectory(hls/mem_read_cmd_merger_512)
 add_subdirectory(hls/mem_write_cmd_page_boundary_check_512)
 add_subdirectory(hls/tlb)
-
 
 
 # Vivado Project
@@ -98,7 +96,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/scripts/generate_bitstream.tcl.in ${C
 set (PROJECT_DEPENDS
       ${CMAKE_CURRENT_SOURCE_DIR}/hdl/common/role_wrapper.sv.in
       ${CMAKE_CURRENT_SOURCE_DIR}/scripts/create_project.tcl.in
-      ${CMAKE_CURRENT_SOURCE_DIR}/ext/network/scripts/network_stack.tcl
+      ${CMAKE_CURRENT_SOURCE_DIR}/submodules/fpga-network-stack/scripts/network_stack.tcl
       ${CMAKE_CURRENT_SOURCE_DIR}/scripts/axi_infrastructure.tcl
       ${CMAKE_CURRENT_SOURCE_DIR}/scripts/dma_ultraplus.tcl
       ${CMAKE_CURRENT_SOURCE_DIR}/scripts/dram_ultraplus.tcl
@@ -120,4 +118,3 @@ add_custom_target(implementation
 add_custom_target(bitstream
    COMMAND ${VIVADO_BINARY} -mode batch -source ${CMAKE_BINARY_DIR}/generate_bitstream.tcl
    DEPENDS ${PROJECT_DEPENDS})
-

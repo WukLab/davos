@@ -7,15 +7,16 @@ set ip_dir $davos_root_dir/ip
 set ip_repo ${CMAKE_SOURCE_DIR}/iprepo
 set constraints_dir $davos_root_dir/constraints
 
-#Check if iprepo is available
+# Check if iprepo is available
 if { [file isdirectory $ip_repo] } {
 	set lib_dir "$ip_repo"
 } else {
 	puts "iprepo directory could not be found."
 	exit 1
 }
+
 # Create project
-create_project $proj_name $proj_dir
+create_project -force $proj_name $proj_dir
 
 # Set project properties
 set obj [get_projects $proj_name]
@@ -57,9 +58,9 @@ source ${CMAKE_CURRENT_SOURCE_DIR}/scripts/axi_infrastructure.tcl
 #Network stack
 #Add HDL files of network stack
 #TODO move to other repo
-add_files $davos_root_dir/ext/network/hdl/common
-add_files $davos_root_dir/ext/network/ip/SmartCamCtl.dcp
-source ${CMAKE_CURRENT_SOURCE_DIR}/ext/network/scripts/network_stack.tcl
+add_files $davos_root_dir/submodules/fpga-network-stack/hdl/common
+add_files $davos_root_dir/submodules/fpga-network-stack/ip/SmartCamCtl.dcp
+source ${CMAKE_CURRENT_SOURCE_DIR}/submodules/fpga-network-stack/scripts/network_stack.tcl
 
 #Memory interface
 source ${CMAKE_CURRENT_SOURCE_DIR}/scripts/dram_${FPGA_FAMILY}.tcl
@@ -70,4 +71,3 @@ source ${CMAKE_CURRENT_SOURCE_DIR}/scripts/dma_${FPGA_FAMILY}.tcl
 #Role
 add_files ${CMAKE_BINARY_DIR}/role_wrapper.sv
 source ${CMAKE_SOURCE_DIR}/scripts/${ROLE_NAME}.tcl
-

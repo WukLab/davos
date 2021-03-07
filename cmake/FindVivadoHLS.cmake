@@ -11,7 +11,7 @@
 cmake_minimum_required(VERSION 3.0)
 
 find_path(VIVADO_HLS_PATH
-  NAMES vitis_hls 
+  NAMES vivado_hls 
   PATHS ${VIVADO_HLS_ROOT_DIR} ENV XILINX_VIVADO_HLS ENV XILINX_HLS
   PATH_SUFFIXES bin
 )
@@ -26,7 +26,7 @@ else()
 
   set(VIVADO_HLS_FOUND TRUE)
   set(VIVADO_HLS_INCLUDE_DIRS ${VIVADO_HLS_ROOT_DIR}/include/)
-  set(VIVADO_HLS_BINARY ${VIVADO_HLS_ROOT_DIR}/bin/vitis_hls)
+  set(VIVADO_HLS_BINARY ${VIVADO_HLS_ROOT_DIR}/bin/vivado_hls)
 
   message(STATUS "Found Vivado HLS at ${VIVADO_HLS_ROOT_DIR}.")
 

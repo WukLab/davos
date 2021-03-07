@@ -1,5 +1,9 @@
-# DavOS (Distributed Accelerator OS)
+# NOTE BY YIZHOU
 
+It only works with Vivado HLS 2019.1. Otherwise the generated signal
+names mismatch.
+
+# DavOS (Distributed Accelerator OS)
 
 ### Prerequisites
 - Xilinx Vivado 2019.1

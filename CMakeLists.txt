@@ -89,13 +89,14 @@ endif()
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/hdl/common/role_wrapper.sv.in ${CMAKE_BINARY_DIR}/role_wrapper.sv)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/hdl/common/davos_config.svh.in ${CMAKE_BINARY_DIR}/davos_config.svh)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/scripts/create_project.tcl.in ${CMAKE_BINARY_DIR}/create_project.tcl)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/scripts/create_project_standalone_tcp.tcl.in ${CMAKE_BINARY_DIR}/create_project_standalone_tcp.tcl)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/scripts/run_synthesis.tcl.in ${CMAKE_BINARY_DIR}/run_synthesis.tcl)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/scripts/run_implementation.tcl.in ${CMAKE_BINARY_DIR}/run_implementation.tcl)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/scripts/generate_bitstream.tcl.in ${CMAKE_BINARY_DIR}/generate_bitstream.tcl)
 
 set (PROJECT_DEPENDS
       ${CMAKE_CURRENT_SOURCE_DIR}/hdl/common/role_wrapper.sv.in
-      ${CMAKE_CURRENT_SOURCE_DIR}/scripts/create_project.tcl.in
+      ${CMAKE_CURRENT_SOURCE_DIR}/scripts/create_project_standalone_tcp.tcl.in
       ${CMAKE_CURRENT_SOURCE_DIR}/submodules/fpga-network-stack/scripts/network_stack.tcl
       ${CMAKE_CURRENT_SOURCE_DIR}/scripts/axi_infrastructure.tcl
       ${CMAKE_CURRENT_SOURCE_DIR}/scripts/dma_ultraplus.tcl
@@ -105,6 +106,10 @@ set (PROJECT_DEPENDS
 
 add_custom_target(project
    COMMAND ${VIVADO_BINARY} -mode batch -source ${CMAKE_BINARY_DIR}/create_project.tcl
+   DEPENDS ${PROJECT_DEPENDS})
+
+add_custom_target(project_standalone_tcp
+   COMMAND ${VIVADO_BINARY} -mode batch -source ${CMAKE_BINARY_DIR}/create_project_standalone_tcp.tcl
    DEPENDS ${PROJECT_DEPENDS})
 
 add_custom_target(synthesize

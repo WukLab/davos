@@ -58,7 +58,7 @@ module mem_single_inf #(
     axi_stream.slave        s_axis_mem_write_data,
 
     /* CONTROL INTERFACE */
-    axi_lite.slave      s_axil,
+    //axi_lite.slave      s_axil,
 
     /* DRIVER INTERFACE */
     // Slave Interface Write Address Ports
@@ -355,34 +355,34 @@ endgenerate
 /*
  * DDR Controller
  */
- ddr_controller controller_inst(
-    .pcie_clk(pcie_clk),
-    .pcie_aresetn(pcie_aresetn),
-    .mem_clk(mem_clk), //TODO
-    .mem_aresetn(mem_aresetn),
-    
-     // AXI Lite Master Interface connections
-    .s_axil                         (s_axil),
-
-    // Statistics
-    .write_cmd_counter              (write_cmd_counter),
-    .write_word_counter             (write_word_counter),
-    .write_pkg_counter              (write_pkg_counter),
-    .write_length_counter           (write_length_counter),
-    .write_sts_counter              (write_sts_counter),
-    .write_sts_error_counter        (write_sts_error_counter),
-
-    .read_cmd_counter               (read_cmd_counter),
-    .read_word_counter              (read_word_counter),
-    .read_pkg_counter               (read_pkg_counter),
-    .read_length_counter            (read_length_counter),
-    .read_sts_counter               (read_sts_counter),
-    .read_sts_error_counter         (read_sts_error_counter),
-
-    .s2mm_error                     (s2mm_error),
-    .mm2s_error                     (mm2s_error)
-
-);
+/*  ddr_controller controller_inst( */
+/*     .pcie_clk(pcie_clk), */
+/*     .pcie_aresetn(pcie_aresetn), */
+/*     .mem_clk(mem_clk), //TODO */
+/*     .mem_aresetn(mem_aresetn), */
+/*      */
+/*      // AXI Lite Master Interface connections */
+/*     .s_axil                         (s_axil), */
+/*  */
+/*     // Statistics */
+/*     .write_cmd_counter              (write_cmd_counter), */
+/*     .write_word_counter             (write_word_counter), */
+/*     .write_pkg_counter              (write_pkg_counter), */
+/*     .write_length_counter           (write_length_counter), */
+/*     .write_sts_counter              (write_sts_counter), */
+/*     .write_sts_error_counter        (write_sts_error_counter), */
+/*  */
+/*     .read_cmd_counter               (read_cmd_counter), */
+/*     .read_word_counter              (read_word_counter), */
+/*     .read_pkg_counter               (read_pkg_counter), */
+/*     .read_length_counter            (read_length_counter), */
+/*     .read_sts_counter               (read_sts_counter), */
+/*     .read_sts_error_counter         (read_sts_error_counter), */
+/*  */
+/*     .s2mm_error                     (s2mm_error), */
+/*     .mm2s_error                     (mm2s_error) */
+/*  */
+/* ); */
 
 
 

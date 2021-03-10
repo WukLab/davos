@@ -1,7 +1,7 @@
-set proj_name "vivado_standalone_tcp"
+set proj_name "generated_standalone_tcp"
 set root_dir ${CMAKE_SOURCE_DIR}
 set davos_root_dir ${CMAKE_CURRENT_SOURCE_DIR}
-set proj_dir ${CMAKE_BINARY_DIR}/vivado_standalone_tcp_project
+set proj_dir ${CMAKE_BINARY_DIR}/generated_standalone_tcp_project
 set src_dir $davos_root_dir/hdl
 set ip_dir $davos_root_dir/ip
 set ip_repo ${CMAKE_SOURCE_DIR}/iprepo
@@ -36,9 +36,12 @@ add_files $src_dir/standalone_tcp
 #add_files -norecurse $src_dir/${FPGA_FAMILY}
 #add_files $src_dir/${FPGA_FAMILY}/${DEVICE_NAME}
 
-set_property top os [current_fileset]
+#
+# NOTE: in os.sv
+#
+set_property top tcp_top [current_fileset]
 
-add_files -fileset constrs_1 $constraints_dir/${DEVICE_NAME}.xdc
+#add_files -fileset constrs_1 $constraints_dir/${DEVICE_NAME}.xdc
 update_compile_order -fileset sources_1
 
 #create ip directory
@@ -57,15 +60,17 @@ source ${CMAKE_CURRENT_SOURCE_DIR}/scripts/axi_infrastructure.tcl
 #Add HDL files of network stack
 #TODO move to other repo
 add_files $davos_root_dir/submodules/fpga-network-stack/hdl/common
-add_files $davos_root_dir/submodules/fpga-network-stack/ip/SmartCamCtl.dcp
+#add_files $davos_root_dir/submodules/fpga-network-stack/ip/SmartCamCtl.dcp
 source ${CMAKE_CURRENT_SOURCE_DIR}/submodules/fpga-network-stack/scripts/network_stack.tcl
 
 #Memory interface
 source ${CMAKE_CURRENT_SOURCE_DIR}/scripts/dram_${FPGA_FAMILY}.tcl
 
 #DMA interface
-source ${CMAKE_CURRENT_SOURCE_DIR}/scripts/dma_${FPGA_FAMILY}.tcl
+#source ${CMAKE_CURRENT_SOURCE_DIR}/scripts/dma_${FPGA_FAMILY}.tcl
 
 #Role
-add_files ${CMAKE_BINARY_DIR}/role_wrapper.sv
-source ${CMAKE_SOURCE_DIR}/scripts/${ROLE_NAME}.tcl
+#add_files $src_dir/role_wrapper.sv
+#source ${CMAKE_SOURCE_DIR}/scripts/${ROLE_NAME}.tcl
+
+ipx::package_project -root_dir "${CMAKE_SOURCE_DIR}/iprepo/tcp_top" -vendor wuklab.io -library user -taxonomy /UserIP -import_files -set_current false

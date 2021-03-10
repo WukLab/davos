@@ -38,11 +38,12 @@ if (DEVICE_NAME STREQUAL "adm7v3")
    set(NETWORK_BANDWIDTH 10 CACHE STRING "Network bandwidth")
    set(DATA_WIDTH 8 CACHE STRING "Network stack data width")
 endif()
+
 set(ROLE_CLK net CACHE STRING "role clock")
 set(ROLE_NAME benchmark_role CACHE STRING "Role name")
 
 #Network stack config
-set(TCP_STACK_EN 0 CACHE BOOL "Enable TCP/IP stack")
+set(TCP_STACK_EN 1 CACHE BOOL "Enable TCP/IP stack")
 set(UDP_STACK_EN 0 CACHE BOOL "Enable UDP/IP stack")
 set(ROCE_STACK_EN 0 CACHE BOOL "Enable RoCEv2 stack")
 
@@ -63,7 +64,6 @@ if (NETWORK_BANDWIDTH STREQUAL "100")
       set(CLOCK_PERIOD 3.2)
    endif()
 endif()
-
 
 # Network stack IPs
 add_subdirectory(submodules/fpga-network-stack)

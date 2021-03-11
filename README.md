@@ -3,6 +3,14 @@
 It only works with Vivado HLS 2019.1. Otherwise the generated signal
 names mismatch.
 
+```
+mkdir build
+cd build
+../run.sh
+make installip
+make project
+```
+
 # DavOS (Distributed Accelerator OS)
 
 ### Prerequisites

@@ -69,13 +69,13 @@ endif()
 add_subdirectory(submodules/fpga-network-stack)
 
 # HLS IPs
-add_subdirectory(hls/dma_bench)
-add_subdirectory(hls/ethernet_frame_padding)
-add_subdirectory(hls/ethernet_frame_padding_512)
-add_subdirectory(hls/mem_cmd_data_merger_512)
-add_subdirectory(hls/mem_read_cmd_merger_512)
-add_subdirectory(hls/mem_write_cmd_page_boundary_check_512)
-add_subdirectory(hls/tlb)
+# add_subdirectory(hls/dma_bench)
+# add_subdirectory(hls/ethernet_frame_padding)
+# add_subdirectory(hls/ethernet_frame_padding_512)
+# add_subdirectory(hls/mem_cmd_data_merger_512)
+# add_subdirectory(hls/mem_read_cmd_merger_512)
+# add_subdirectory(hls/mem_write_cmd_page_boundary_check_512)
+# add_subdirectory(hls/tlb)
 
 
 # Vivado Project

@@ -170,11 +170,10 @@ set_property -dict [list CONFIG.Component_Name {axis_interconnect_512_1to2} CONF
 generate_target {instantiation_template} [get_files $device_ip_dir/axis_interconnect_512_1to2/axis_interconnect_512_1to2.xci]
 update_compile_order -fileset sources_1
 
-create_ip -name mem_cmd_data_merger_512 -vendor ethz.systems.fpga -library hls -version 0.2 -module_name mem_cmd_data_merger_512_ip -dir $device_ip_dir
-generate_target {instantiation_template} [get_files $device_ip_dir/mem_cmd_data_merger_512_ip/mem_cmd_data_merger_512_ip.xci]
-update_compile_order -fileset sources_1
-
-create_ip -name mem_read_cmd_merger_512 -vendor ethz.systems.fpga -library hls -version 0.1 -module_name mem_read_cmd_merger_512_ip -dir $device_ip_dir
-generate_target {instantiation_template} [get_files $device_ip_dir/mem_read_cmd_merger_512_ip/mem_read_cmd_merger_512_ip.xci]
-update_compile_order -fileset sources_1
-
+# create_ip -name mem_cmd_data_merger_512 -vendor ethz.systems.fpga -library hls -version 0.2 -module_name mem_cmd_data_merger_512_ip -dir $device_ip_dir
+# generate_target {instantiation_template} [get_files $device_ip_dir/mem_cmd_data_merger_512_ip/mem_cmd_data_merger_512_ip.xci]
+# update_compile_order -fileset sources_1
+# 
+# create_ip -name mem_read_cmd_merger_512 -vendor ethz.systems.fpga -library hls -version 0.1 -module_name mem_read_cmd_merger_512_ip -dir $device_ip_dir
+# generate_target {instantiation_template} [get_files $device_ip_dir/mem_read_cmd_merger_512_ip/mem_read_cmd_merger_512_ip.xci]
+# update_compile_order -fileset sources_1

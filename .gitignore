@@ -58,5 +58,6 @@ doc/
 # wireshar
 *.pcapng
 
+ip/vcu118/
 iprepo/
 build/

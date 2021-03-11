@@ -1,6 +1,3 @@
-[submodule "ext/network"]
-	path = ext/network
-	url = https://github.com/fpgasystems/fpga-network-stack
-[submodule "submodules/fpga-network-stack"]
-	path = submodules/fpga-network-stack
+[submodule "fpga-network-stack"]
+	path = fpga-network-stack
 	url = https://github.com/WukLab/fpga-network-stack

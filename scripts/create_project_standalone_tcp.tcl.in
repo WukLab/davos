@@ -39,7 +39,7 @@ add_files $src_dir/standalone_tcp
 #
 # NOTE: in os.sv
 #
-set_property top tcp_top [current_fileset]
+set_property top snic_tcp_top [current_fileset]
 
 #add_files -fileset constrs_1 $constraints_dir/${DEVICE_NAME}.xdc
 update_compile_order -fileset sources_1
@@ -59,9 +59,9 @@ source ${CMAKE_CURRENT_SOURCE_DIR}/scripts/axi_infrastructure.tcl
 #Network stack
 #Add HDL files of network stack
 #TODO move to other repo
-add_files $davos_root_dir/submodules/fpga-network-stack/hdl/common
-#add_files $davos_root_dir/submodules/fpga-network-stack/ip/SmartCamCtl.dcp
-source ${CMAKE_CURRENT_SOURCE_DIR}/submodules/fpga-network-stack/scripts/network_stack.tcl
+add_files $davos_root_dir/fpga-network-stack/hdl/common
+#add_files $davos_root_dir/fpga-network-stack/ip/SmartCamCtl.dcp
+source ${CMAKE_CURRENT_SOURCE_DIR}/fpga-network-stack/scripts/network_stack.tcl
 
 #Memory interface
 source ${CMAKE_CURRENT_SOURCE_DIR}/scripts/dram_${FPGA_FAMILY}.tcl
@@ -73,4 +73,4 @@ source ${CMAKE_CURRENT_SOURCE_DIR}/scripts/dram_${FPGA_FAMILY}.tcl
 #add_files $src_dir/role_wrapper.sv
 #source ${CMAKE_SOURCE_DIR}/scripts/${ROLE_NAME}.tcl
 
-ipx::package_project -root_dir "${CMAKE_SOURCE_DIR}/iprepo/tcp_top" -vendor wuklab.io -library user -taxonomy /UserIP -import_files -set_current false
+ipx::package_project -root_dir "${CMAKE_SOURCE_DIR}/iprepo/snic_tcp" -vendor wuklab.io -library user -taxonomy /UserIP -import_files -set_current false

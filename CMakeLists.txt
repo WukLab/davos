@@ -66,7 +66,7 @@ if (NETWORK_BANDWIDTH STREQUAL "100")
 endif()
 
 # Network stack IPs
-add_subdirectory(submodules/fpga-network-stack)
+add_subdirectory(fpga-network-stack)
 
 # HLS IPs
 # add_subdirectory(hls/dma_bench)
@@ -97,29 +97,32 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/scripts/generate_bitstream.tcl.in ${C
 set (PROJECT_DEPENDS
       ${CMAKE_CURRENT_SOURCE_DIR}/hdl/common/role_wrapper.sv.in
       ${CMAKE_CURRENT_SOURCE_DIR}/scripts/create_project_standalone_tcp.tcl.in
-      ${CMAKE_CURRENT_SOURCE_DIR}/submodules/fpga-network-stack/scripts/network_stack.tcl
+      ${CMAKE_CURRENT_SOURCE_DIR}/fpga-network-stack/scripts/network_stack.tcl
       ${CMAKE_CURRENT_SOURCE_DIR}/scripts/axi_infrastructure.tcl
       ${CMAKE_CURRENT_SOURCE_DIR}/scripts/dma_ultraplus.tcl
       ${CMAKE_CURRENT_SOURCE_DIR}/scripts/dram_ultraplus.tcl
       ${CMAKE_CURRENT_SOURCE_DIR}/scripts/network_ultraplus.tcl
       ${CMAKE_SOURCE_DIR}/scripts/${ROLE_NAME}.tcl)
 
-add_custom_target(project
-   COMMAND ${VIVADO_BINARY} -mode batch -source ${CMAKE_BINARY_DIR}/create_project.tcl
-   DEPENDS ${PROJECT_DEPENDS})
+# add_custom_target(project
+#    COMMAND ${VIVADO_BINARY} -mode batch -source ${CMAKE_BINARY_DIR}/create_project.tcl
+#    DEPENDS ${PROJECT_DEPENDS})
 
 add_custom_target(project_standalone_tcp
    COMMAND ${VIVADO_BINARY} -mode batch -source ${CMAKE_BINARY_DIR}/create_project_standalone_tcp.tcl
    DEPENDS ${PROJECT_DEPENDS})
 
-add_custom_target(synthesize
-   COMMAND ${VIVADO_BINARY} -mode batch -source ${CMAKE_BINARY_DIR}/run_synthesis.tcl
-   DEPENDS ${PROJECT_DEPENDS})
+add_custom_target(g
+   COMMAND ${VIVADO_BINARY} generated_standalone_tcp_project/generated_standalone_tcp.xpr)
 
-add_custom_target(implementation
-   COMMAND ${VIVADO_BINARY} -mode batch -source ${CMAKE_BINARY_DIR}/run_implementation.tcl
-   DEPENDS ${PROJECT_DEPENDS})
-
-add_custom_target(bitstream
-   COMMAND ${VIVADO_BINARY} -mode batch -source ${CMAKE_BINARY_DIR}/generate_bitstream.tcl
-   DEPENDS ${PROJECT_DEPENDS})
+# add_custom_target(synthesize
+#    COMMAND ${VIVADO_BINARY} -mode batch -source ${CMAKE_BINARY_DIR}/run_synthesis.tcl
+#    DEPENDS ${PROJECT_DEPENDS})
+# 
+# add_custom_target(implementation
+#    COMMAND ${VIVADO_BINARY} -mode batch -source ${CMAKE_BINARY_DIR}/run_implementation.tcl
+#    DEPENDS ${PROJECT_DEPENDS})
+# 
+# add_custom_target(bitstream
+#    COMMAND ${VIVADO_BINARY} -mode batch -source ${CMAKE_BINARY_DIR}/generate_bitstream.tcl
+#    DEPENDS ${PROJECT_DEPENDS})

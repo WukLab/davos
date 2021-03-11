@@ -4,7 +4,7 @@
 `include "davos_config.svh"
 `include "davos_types.svh"
 
-module tcp_top #(
+module snic_tcp_top #(
     parameter AXI_ID_WIDTH = 1,
     parameter NUM_DDR_CHANNELS = 1,
     parameter ENABLE_DDR = 1,

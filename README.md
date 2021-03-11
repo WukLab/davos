@@ -8,8 +8,13 @@ mkdir build
 cd build
 ../run.sh
 make installip
-make project
+make project_standalone_tcp
 ```
+
+To open Vivado GUI, run `make g` inside `build/`.
+
+To open Vivado HLS GUI, go to `build/fpga-network-stack/hls/`.
+
 
 # DavOS (Distributed Accelerator OS)
 

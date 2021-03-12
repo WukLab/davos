@@ -14,32 +14,15 @@ module snic_tcp_top #(
     input wire[NUM_DDR_CHANNELS-1:0]    mem_aresetn,
     input wire      net_clk,
     input wire      net_aresetn,
-    output logic    user_clk,
-    output logic    user_aresetn,
 
-    //Network
+    // TCP Network
     axi_stream.slave    s_axis_net_rx,
     axi_stream.master   m_axis_net_tx,
-    
-    axis_meta.slave     s_axis_listen_port,
-    axis_meta.master    m_axis_listen_port_status,
-   
-    axis_meta.slave     s_axis_open_connection,
-    axis_meta.master    m_axis_open_status,
-    axis_meta.slave     s_axis_close_connection,
 
-    axis_meta.master    m_axis_notifications,
-    axis_meta.slave     s_axis_read_package,
-    
-    axis_meta.master    m_axis_rx_metadata,
-    axi_stream.master   m_axis_rx_data,
-    
-    axis_meta.slave     s_axis_tx_metadata,
-    axi_stream.slave    s_axis_tx_data,
-    axis_meta.master    m_axis_tx_status,
-
-    //DDR
-    input wire          ddr_calib_complete,
+    // snic_handler Network
+    // traffic from or to endpoint
+    axi_stream.slave    s_axis_net_rx_from_endpoint,
+    axi_stream.master   m_axis_net_tx_to_endpoint,
 
     // Slave Interface Write Address Ports
     output logic [AXI_ID_WIDTH-1:0]                 m_axi_awid  [NUM_DDR_CHANNELS-1:0],
@@ -101,29 +84,42 @@ axis_mem_cmd    axis_tcp_mem_write_cmd[NUM_TCP_CHANNELS]();
 axi_stream      axis_tcp_mem_write_data[NUM_TCP_CHANNELS]();
 axis_mem_status axis_tcp_mem_write_status[NUM_TCP_CHANNELS]();
 
-//role_wrapper #(
-//    .NUM_ROLE_DDR_CHANNELS(NUM_DDR_CHANNELS - NUM_TCP_CHANNELS)
-//) user_role_wrapper (
-//    .net_clk(net_clk),
-//    .net_aresetn(net_aresetn),
+axis_meta #(.WIDTH(16))     axis_tcp_listen_port();
+axis_meta #(.WIDTH(8))      axis_tcp_listen_port_status();
+axis_meta #(.WIDTH(48))     axis_tcp_open_connection();
+axis_meta #(.WIDTH(24))     axis_tcp_open_status();
+axis_meta #(.WIDTH(16))     axis_tcp_close_connection();
+axis_meta #(.WIDTH(88))     axis_tcp_notification();
+axis_meta #(.WIDTH(32))     axis_tcp_read_package();
 
-//    .user_clk(user_clk),
-//    .user_aresetn(user_aresetn),
+axis_meta #(.WIDTH(16))     axis_tcp_rx_metadata();
+axi_stream #(.WIDTH(NETWORK_STACK_WIDTH))    axis_tcp_rx_data();
+axis_meta #(.WIDTH(32))     axis_tcp_tx_metadata();
+axi_stream #(.WIDTH(NETWORK_STACK_WIDTH))    axis_tcp_tx_data();
+axis_meta #(.WIDTH(64))     axis_tcp_tx_status();
 
-//    /* NETWORK - TCP/IP INTERFACWE */
-//    .m_axis_listen_port(axis_tcp_listen_port),
-//    .s_axis_listen_port_status(axis_tcp_port_status),
-//    .m_axis_open_connection(axis_tcp_open_connection),
-//    .s_axis_open_status(axis_tcp_open_status),
-//    .m_axis_close_connection(axis_tcp_close_connection),
-//    .s_axis_notifications(axis_tcp_notification),
-//    .m_axis_read_package(axis_tcp_read_pkg),
-//    .s_axis_rx_metadata(axis_tcp_rx_meta),
-//    .s_axis_rx_data(axis_tcp_rx_data),
-//    .m_axis_tx_metadata(axis_tcp_tx_meta),
-//    .m_axis_tx_data(axis_tcp_tx_data),
-//    .s_axis_tx_status(axis_tcp_tx_status)
-//);
+role_wrapper #(
+    .NUM_ROLE_DDR_CHANNELS(NUM_DDR_CHANNELS - NUM_TCP_CHANNELS)
+) user_role_wrapper (
+    .net_clk(net_clk),
+    .net_aresetn(net_aresetn),
+
+    .s_axis_net_rx_from_endpoint(s_axis_net_rx_from_endpoint),
+    .m_axis_net_tx_to_endpoint(m_axis_net_tx_to_endpoint),
+
+    .m_axis_listen_port(axis_tcp_listen_port),
+    .s_axis_listen_port_status(axis_tcp_listen_port_status),
+    .m_axis_open_connection(axis_tcp_open_connection),
+    .s_axis_open_status(axis_tcp_open_status),
+    .m_axis_close_connection(axis_tcp_close_connection),
+    .s_axis_notifications(axis_tcp_notification),
+    .m_axis_read_package(axis_tcp_read_package),
+    .s_axis_rx_metadata(axis_tcp_rx_metadata),
+    .s_axis_rx_data(axis_tcp_rx_data),
+    .m_axis_tx_metadata(axis_tcp_tx_metadata),
+    .m_axis_tx_data(axis_tcp_tx_data),
+    .s_axis_tx_status(axis_tcp_tx_status)
+);
 
 network_stack #(
     .WIDTH(NETWORK_STACK_WIDTH),
@@ -147,22 +143,22 @@ network_stack #(
     .s_axis_read_data(axis_tcp_mem_read_data),
     .m_axis_write_data(axis_tcp_mem_write_data),
    
-    .s_axis_listen_port(s_axis_listen_port),
-    .m_axis_listen_port_status(m_axis_listen_port_status),
+    .s_axis_listen_port(axis_tcp_listen_port),
+    .m_axis_listen_port_status(axis_tcp_listen_port_status),
 
-    .s_axis_open_connection(s_axis_open_connection),
-    .m_axis_open_status(m_axis_open_status),
-    .s_axis_close_connection(s_axis_close_connection),
+    .s_axis_open_connection(axis_tcp_open_connection),
+    .m_axis_open_status(axis_tcp_open_status),
+    .s_axis_close_connection(axis_tcp_close_connection),
 
-    .m_axis_notifications(m_axis_notifications),
-    .s_axis_read_package(s_axis_read_package),
+    .m_axis_notifications(axis_tcp_notification),
+    .s_axis_read_package(axis_tcp_read_package),
 
-    .m_axis_rx_metadata(m_axis_rx_metadata),
-    .m_axis_rx_data(m_axis_rx_data),
+    .m_axis_rx_metadata(axis_tcp_rx_metadata),
+    .m_axis_rx_data(axis_tcp_rx_data),
 
-    .s_axis_tx_metadata(s_axis_tx_metadata),
-    .s_axis_tx_data(s_axis_tx_data),
-    .m_axis_tx_status(m_axis_tx_status)
+    .s_axis_tx_metadata(axis_tcp_tx_metadata),
+    .s_axis_tx_data(axis_tcp_tx_data),
+    .m_axis_tx_status(axis_tcp_tx_status)
 );
 
 /*
@@ -212,13 +208,11 @@ mem_single_inf #(
     .ENABLE(ENABLE_DDR),
     .UNALIGNED(0 < NUM_TCP_CHANNELS)
 ) mem_inf_inst0 (
-    .user_clk(user_clk),
-    .user_aresetn(ddr_calib_complete),
-    //.pcie_clk(pcie_clk), //TODO remove
-    //.pcie_aresetn(pcie_aresetn),
+    .user_clk(net_clk),
+    .user_aresetn(net_aresetn),
     .mem_clk(mem_clk[DDR_CHANNEL0]),
     .mem_aresetn(mem_aresetn[DDR_CHANNEL0]),
-    
+
     //memory read commands
     .s_axis_mem_read_cmd(axis_mem_read_cmd[DDR_CHANNEL0]),
     .m_axis_mem_read_status(axis_mem_read_status[DDR_CHANNEL0]),

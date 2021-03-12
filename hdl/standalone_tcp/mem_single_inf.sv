@@ -38,8 +38,6 @@ module mem_single_inf #(
     input wire                  user_aresetn,
     input wire                  mem_clk,
     input wire                  mem_aresetn,
-    input wire                  pcie_clk,
-    input wire                  pcie_aresetn, //TODO remove
     
     /* USER INTERFACE */    
     //memory access

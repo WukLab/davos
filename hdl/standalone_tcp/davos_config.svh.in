@@ -17,9 +17,9 @@ parameter ROCE_STACK_EN = ${ROCE_STACK_EN};
 
 
 //DRAM
-parameter NUM_DDR_CHANNELS = 2;
-parameter NUM_TCP_CHANNELS = 2;
-parameter NUM_NET_PORTS = 2;
+// parameter NUM_DDR_CHANNELS = 1;
+// parameter NUM_TCP_CHANNELS = 2;
+// parameter NUM_NET_PORTS = 2;
 
 
 `define DRAM_EN${DRAM_EN}${TCP_STACK_EN}

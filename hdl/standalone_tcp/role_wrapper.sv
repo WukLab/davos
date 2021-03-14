@@ -1,10 +1,7 @@
 `timescale 1ns / 1ps
 `default_nettype none
 
-module role_wrapper #(
-    parameter NUM_ROLE_DDR_CHANNELS = 0,
-    parameter NUM_DDR_CHANNELS = 1
-) (
+module role_wrapper (
     input wire      net_clk,
     input wire      net_aresetn,
     

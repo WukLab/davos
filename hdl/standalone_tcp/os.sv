@@ -10,8 +10,8 @@ module snic_tcp_top #(
     parameter ENABLE_DDR = 1,
     parameter NUM_TCP_CHANNELS = 1
 ) (
-    input wire[NUM_DDR_CHANNELS-1:0]    mem_clk,
-    input wire[NUM_DDR_CHANNELS-1:0]    mem_aresetn,
+    input wire    mem_clk,
+    input wire    mem_aresetn,
     input wire      net_clk,
     input wire      net_aresetn,
 
@@ -98,9 +98,7 @@ axis_meta #(.WIDTH(32))     axis_tcp_tx_metadata();
 axi_stream #(.WIDTH(NETWORK_STACK_WIDTH))    axis_tcp_tx_data();
 axis_meta #(.WIDTH(64))     axis_tcp_tx_status();
 
-role_wrapper #(
-    .NUM_ROLE_DDR_CHANNELS(NUM_DDR_CHANNELS - NUM_TCP_CHANNELS)
-) user_role_wrapper (
+role_wrapper user_role_wrapper (
     .net_clk(net_clk),
     .net_aresetn(net_aresetn),
 
@@ -210,8 +208,8 @@ mem_single_inf #(
 ) mem_inf_inst0 (
     .user_clk(net_clk),
     .user_aresetn(net_aresetn),
-    .mem_clk(mem_clk[DDR_CHANNEL0]),
-    .mem_aresetn(mem_aresetn[DDR_CHANNEL0]),
+    .mem_clk(mem_clk),
+    .mem_aresetn(mem_aresetn),
 
     //memory read commands
     .s_axis_mem_read_cmd(axis_mem_read_cmd[DDR_CHANNEL0]),

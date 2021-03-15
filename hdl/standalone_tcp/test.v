@@ -149,6 +149,7 @@ integer infd, outfd, nr_flits, finished_send;
 reg [63:0] this_packet_start, this_packet_end;
 
 parameter IN_FILEPATH="/home/ys/Github/SuperNIC/fpga/spinalhdl/generated_input_packets.txt";
+parameter OUT_FILEPATH="/home/ys/Github/SuperNIC/fpga/third_party/davos/output.txt";
 
 initial begin
     clk_250mhz = 0;
@@ -184,6 +185,7 @@ initial begin
   s_axis_net_rx_from_endpoint_valid = 0;
 
   infd = $fopen(IN_FILEPATH,"r");
+  $display("Input file fd %d", infd);
   if (infd == 0) begin
     $display("ERROR, input file not found\n");
     $finish;
@@ -247,6 +249,11 @@ initial begin
 end
 
 initial begin
+
+  outfd = $fopen(OUT_FILEPATH, "w");
+  $display("Output file fd %d", outfd);
+  $fdisplay(outfd, "123");
+
   m_axis_net_tx_to_endpoint_ready = 1;
   m_axis_net_tx_ready = 1;
 
@@ -257,6 +264,8 @@ initial begin
       # CLK_PERIOD;
       if (m_axis_net_tx_valid == 1) begin
         $display("INFO: %t: TCP module sends out packet.", $time);
+        $fdisplay(outfd, "%d %x %h", m_axis_net_tx_last, m_axis_net_tx_keep, m_axis_net_tx_data);
+        $display("%d %x %h", m_axis_net_tx_last, m_axis_net_tx_keep, m_axis_net_tx_data);
       end
       
       if (m_axis_net_tx_to_endpoint_valid == 1) begin

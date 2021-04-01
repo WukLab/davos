@@ -264,7 +264,9 @@ initial begin
       # CLK_PERIOD;
       
       if (m_axis_net_tx_valid == 1 && m_axis_net_tx_ready == 1) begin
-        $display("INFO: %t: TCP module sends out packet: %d %x %h", $time, m_axis_net_tx_last, m_axis_net_tx_keep, m_axis_net_tx_data);
+        $display("INFO: %t: TCP module sends out packet: %d %x %h_%h_%h_%h",
+            $time, m_axis_net_tx_last, m_axis_net_tx_keep, m_axis_net_tx_data,
+            16'h8000, 48'h0011223344, 48'h9988771122);
         
         $fdisplay(outfd, "%d %x %h", m_axis_net_tx_last, m_axis_net_tx_keep, m_axis_net_tx_data);
       end

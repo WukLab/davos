@@ -117,11 +117,9 @@ role_wrapper user_role_wrapper (
 
 // This is the TCP stack
 network_stack #(
-    .WIDTH(NETWORK_STACK_WIDTH),
-    .TCP_EN(TCP_STACK_EN),
-    .RX_DDR_BYPASS_EN(1),
-    .UDP_EN(0),
-    .ROCE_EN(0)
+    .WIDTH(512),
+    .TCP_EN(1),
+    .RX_DDR_BYPASS_EN(1)
 ) tcp_stack_inst (
     .net_clk(net_clk),
     .net_aresetn(net_aresetn),

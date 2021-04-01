@@ -106,7 +106,7 @@ set (PROJECT_DEPENDS
 #    COMMAND ${VIVADO_BINARY} -mode batch -source ${CMAKE_BINARY_DIR}/create_project.tcl
 #    DEPENDS ${PROJECT_DEPENDS})
 
-add_custom_target(project_standalone_tcp
+add_custom_target(vivado_standalone_tcp
    COMMAND ${VIVADO_BINARY} -mode batch -source ${CMAKE_BINARY_DIR}/create_project_standalone_tcp.tcl
    DEPENDS ${PROJECT_DEPENDS})
 

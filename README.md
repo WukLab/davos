@@ -1,19 +1,44 @@
 # NOTE BY YIZHOU
 
-It only works with Vivado HLS 2019.1. Otherwise the generated signal
-names mismatch.
+It only works with Vivado HLS 2019.1. Otherwise the generated signal names mismatch.
 
-```
+Run this script
+```bash
 mkdir build
 cd build
-../run.sh
-make installip
-make project_standalone_tcp
+../run.sh                          # generate Makefile etc
+make installip                     # build tcp and snic_handle HLS IPs
+make project_standalone_tcp        # build the combined vivado IP
 ```
 
-To open Vivado GUI, run `make g` inside `build/`.
+- To open Vivado GUI, run `make g` inside `build/`.
+- To open Vivado HLS GUI, go to `build/fpga-network-stack/hls/`.
 
-To open Vivado HLS GUI, go to `build/fpga-network-stack/hls/`.
+## About Vivado project
+
+The top HDL code is in `hdl/standalone_tcp`, which was a copy from `hdl/common`.
+The top file is `hdl/standalone_tcp/os.sv`, in which the top module is `snic_tcp_top`.
+This module connects both `snic_handler` and `tcp`.
+
+
+## About fpga-network-systems
+
+So the original `ip_handler`, which sits right before tcp module,
+will rip off the ethernet headers, and look at ip opcode,
+then distribute packets to icmp, udp, or tcp.
+
+So the TCP module will get packets with `<IP, TCP>` headers.
+
+TCP modules also sends out packets with `<IP, TCP>` headers, too.
+Those packets will then go into `mac_ip_encode`, which will look
+up ARP and attach ethernet headers in the beginning.
+
+
+In all, the `tcp_stack`, or `toe`, deal with packets with `<IP, TCP>` headers.
+
+The next question is how much we can leave it blank there.
+
+
 
 
 # DavOS (Distributed Accelerator OS)

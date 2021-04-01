@@ -72,84 +72,84 @@ wire s_axis_net_rx_ready;
 reg s_axis_net_rx_valid;
 
 design_1 DUT (
-    .mem_clk(clk_250mhz),
-    .net_clk(clk_250mhz),
-    .mem_aresetn(~clk_250mhz_rst),
-    .net_aresetn(~clk_250mhz_rst),
+    .mem_clk_0(clk_250mhz),
+    .net_clk_0(clk_250mhz),
+    .mem_aresetn_0(~clk_250mhz_rst),
+    .net_aresetn_0(~clk_250mhz_rst),
 
-    .m_axi_araddr(m_axi_araddr),
-    .m_axi_arburst(m_axi_arburst),
-    .m_axi_arcache(m_axi_arcache),
-    .m_axi_arid(m_axi_arid),
-    .m_axi_arlen(m_axi_arlen),
-    .m_axi_arlock(m_axi_arlock),
-    .m_axi_arprot(m_axi_arprot),
-    .m_axi_arready(m_axi_arready),
-    .m_axi_arsize(m_axi_arsize),
-    .m_axi_arvalid(m_axi_arvalid),
-    .m_axi_awaddr(m_axi_awaddr),
-    .m_axi_awburst(m_axi_awburst),
-    .m_axi_awcache(m_axi_awcache),
-    .m_axi_awid(m_axi_awid),
-    .m_axi_awlen(m_axi_awlen),
-    .m_axi_awlock(m_axi_awlock),
-    .m_axi_awprot(m_axi_awprot),
-    .m_axi_awready(m_axi_awready),
-    .m_axi_awsize(m_axi_awsize),
-    .m_axi_awvalid(m_axi_awvalid),
-    .m_axi_bid(m_axi_bid),
-    .m_axi_bready(m_axi_bready),
-    .m_axi_bresp(m_axi_bresp),
-    .m_axi_bvalid(m_axi_bvalid),
-    .m_axi_rdata(m_axi_rdata),
-    .m_axi_rid(m_axi_rid),
-    .m_axi_rlast(m_axi_rlast),
-    .m_axi_rready(m_axi_rready),
-    .m_axi_rresp(m_axi_rresp),
-    .m_axi_rvalid(m_axi_rvalid),
-    .m_axi_wdata(m_axi_wdata),
-    .m_axi_wlast(m_axi_wlast),
-    .m_axi_wready(m_axi_wready),
-    .m_axi_wstrb(m_axi_wstrb),
-    .m_axi_wvalid(m_axi_wvalid),
+    .m_axi_0_araddr(m_axi_araddr),
+    .m_axi_0_arburst(m_axi_arburst),
+    .m_axi_0_arcache(m_axi_arcache),
+    .m_axi_0_arid(m_axi_arid),
+    .m_axi_0_arlen(m_axi_arlen),
+    .m_axi_0_arlock(m_axi_arlock),
+    .m_axi_0_arprot(m_axi_arprot),
+    .m_axi_0_arready(m_axi_arready),
+    .m_axi_0_arsize(m_axi_arsize),
+    .m_axi_0_arvalid(m_axi_arvalid),
+    .m_axi_0_awaddr(m_axi_awaddr),
+    .m_axi_0_awburst(m_axi_awburst),
+    .m_axi_0_awcache(m_axi_awcache),
+    .m_axi_0_awid(m_axi_awid),
+    .m_axi_0_awlen(m_axi_awlen),
+    .m_axi_0_awlock(m_axi_awlock),
+    .m_axi_0_awprot(m_axi_awprot),
+    .m_axi_0_awready(m_axi_awready),
+    .m_axi_0_awsize(m_axi_awsize),
+    .m_axi_0_awvalid(m_axi_awvalid),
+    .m_axi_0_bid(m_axi_bid),
+    .m_axi_0_bready(m_axi_bready),
+    .m_axi_0_bresp(m_axi_bresp),
+    .m_axi_0_bvalid(m_axi_bvalid),
+    .m_axi_0_rdata(m_axi_rdata),
+    .m_axi_0_rid(m_axi_rid),
+    .m_axi_0_rlast(m_axi_rlast),
+    .m_axi_0_rready(m_axi_rready),
+    .m_axi_0_rresp(m_axi_rresp),
+    .m_axi_0_rvalid(m_axi_rvalid),
+    .m_axi_0_wdata(m_axi_wdata),
+    .m_axi_0_wlast(m_axi_wlast),
+    .m_axi_0_wready(m_axi_wready),
+    .m_axi_0_wstrb(m_axi_wstrb),
+    .m_axi_0_wvalid(m_axi_wvalid),
 
-    .m_axis_net_tx_data(m_axis_net_tx_data),
-    .m_axis_net_tx_dest(m_axis_net_tx_dest),
-    .m_axis_net_tx_keep(m_axis_net_tx_keep),
-    .m_axis_net_tx_last(m_axis_net_tx_last),
-    .m_axis_net_tx_ready(m_axis_net_tx_ready),
-    .m_axis_net_tx_valid(m_axis_net_tx_valid),
+    .m_axis_net_tx_0_data(m_axis_net_tx_data),
+    .m_axis_net_tx_0_dest(m_axis_net_tx_dest),
+    .m_axis_net_tx_0_keep(m_axis_net_tx_keep),
+    .m_axis_net_tx_0_last(m_axis_net_tx_last),
+    .m_axis_net_tx_0_ready(m_axis_net_tx_ready),
+    .m_axis_net_tx_0_valid(m_axis_net_tx_valid),
 
-    .s_axis_net_rx_data(s_axis_net_rx_data),
-    .s_axis_net_rx_keep(s_axis_net_rx_keep),
-    .s_axis_net_rx_last(s_axis_net_rx_last),
-    .s_axis_net_rx_ready(s_axis_net_rx_ready),
-    .s_axis_net_rx_valid(s_axis_net_rx_valid),
+    .s_axis_net_rx_0_data(s_axis_net_rx_data),
+    .s_axis_net_rx_0_keep(s_axis_net_rx_keep),
+    .s_axis_net_rx_0_last(s_axis_net_rx_last),
+    .s_axis_net_rx_0_ready(s_axis_net_rx_ready),
+    .s_axis_net_rx_0_valid(s_axis_net_rx_valid),
 
-    .m_axis_net_tx_to_endpoint_data(m_axis_net_tx_to_endpoint_data),
-    .m_axis_net_tx_to_endpoint_dest(m_axis_net_tx_to_endpoint_dest),
-    .m_axis_net_tx_to_endpoint_keep(m_axis_net_tx_to_endpoint_keep),
-    .m_axis_net_tx_to_endpoint_last(m_axis_net_tx_to_endpoint_last),
-    .m_axis_net_tx_to_endpoint_ready(m_axis_net_tx_to_endpoint_ready),
-    .m_axis_net_tx_to_endpoint_valid(m_axis_net_tx_to_endpoint_valid),
+    .m_axis_net_tx_to_endpoint_0_data(m_axis_net_tx_to_endpoint_data),
+    .m_axis_net_tx_to_endpoint_0_dest(m_axis_net_tx_to_endpoint_dest),
+    .m_axis_net_tx_to_endpoint_0_keep(m_axis_net_tx_to_endpoint_keep),
+    .m_axis_net_tx_to_endpoint_0_last(m_axis_net_tx_to_endpoint_last),
+    .m_axis_net_tx_to_endpoint_0_ready(m_axis_net_tx_to_endpoint_ready),
+    .m_axis_net_tx_to_endpoint_0_valid(m_axis_net_tx_to_endpoint_valid),
 
-    .s_axis_net_rx_from_endpoint_data(s_axis_net_rx_from_endpoint_data),
-    .s_axis_net_rx_from_endpoint_keep(s_axis_net_rx_from_endpoint_keep),
-    .s_axis_net_rx_from_endpoint_last(s_axis_net_rx_from_endpoint_last),
-    .s_axis_net_rx_from_endpoint_ready(s_axis_net_rx_from_endpoint_ready),
-    .s_axis_net_rx_from_endpoint_valid(s_axis_net_rx_from_endpoint_valid)
+    .s_axis_net_rx_from_endpoint_0_data(s_axis_net_rx_from_endpoint_data),
+    .s_axis_net_rx_from_endpoint_0_keep(s_axis_net_rx_from_endpoint_keep),
+    .s_axis_net_rx_from_endpoint_0_last(s_axis_net_rx_from_endpoint_last),
+    .s_axis_net_rx_from_endpoint_0_ready(s_axis_net_rx_from_endpoint_ready),
+    .s_axis_net_rx_from_endpoint_0_valid(s_axis_net_rx_from_endpoint_valid)
 );
 
 reg [63:0] send_start, send_end, receive_start, receive_end;
 reg [63:0] nr_requests_send, nr_requests_received, nr_rx_units;
 reg enable_send;
 
-integer infd, outfd, nr_flits, finished_send;
+integer infd, outfd, nr_flits, finished_send, stop_simulation;
 
 reg [63:0] this_packet_start, this_packet_end;
 
-parameter IN_FILEPATH="/home/ys/Github/SuperNIC/fpga/spinalhdl/generated_input_packets.txt";
-parameter OUT_FILEPATH="/home/ys/Github/SuperNIC/fpga/third_party/davos/output.txt";
+parameter IN_FILEPATH="/home/ys/Github/SuperNIC/fpga/spinalhdl/generated_pkts/snic_tcp_input_packets.txt";
+parameter OUT_FILEPATH="/home/ys/Github/SuperNIC/fpga/third_party/davos/build/output.txt";
 
 initial begin
     clk_250mhz = 0;
@@ -224,7 +224,7 @@ initial begin
       if (nr_flits == 0) begin
         s_axis_net_rx_from_endpoint_last = 1;
       end else begin
-        s_axis_net_rx_from_endpoint_last = -1;
+        s_axis_net_rx_from_endpoint_last = 0;
       end
       s_axis_net_rx_from_endpoint_valid = 1;
 
@@ -252,7 +252,7 @@ initial begin
 
   outfd = $fopen(OUT_FILEPATH, "w");
   $display("Output file fd %d", outfd);
-  $fdisplay(outfd, "123");
+  $fdisplay(outfd, "Packets sent out by TCP module:");
 
   m_axis_net_tx_to_endpoint_ready = 1;
   m_axis_net_tx_ready = 1;
@@ -262,16 +262,29 @@ initial begin
   // and then i can inspect the content, then hook with us.
   while (1) begin
       # CLK_PERIOD;
-      if (m_axis_net_tx_valid == 1) begin
-        $display("INFO: %t: TCP module sends out packet.", $time);
+      
+      if (m_axis_net_tx_valid == 1 && m_axis_net_tx_ready == 1) begin
+        $display("INFO: %t: TCP module sends out packet: %d %x %h", $time, m_axis_net_tx_last, m_axis_net_tx_keep, m_axis_net_tx_data);
+        
         $fdisplay(outfd, "%d %x %h", m_axis_net_tx_last, m_axis_net_tx_keep, m_axis_net_tx_data);
-        $display("%d %x %h", m_axis_net_tx_last, m_axis_net_tx_keep, m_axis_net_tx_data);
       end
       
-      if (m_axis_net_tx_to_endpoint_valid == 1) begin
+      if (m_axis_net_tx_to_endpoint_valid == 1 && m_axis_net_tx_to_endpoint_ready == 1) begin
         $display("INFO: %t: handler module sends out packet to endhost.", $time);
       end
   end
 end
+
+initial begin
+    stop_simulation = 0;
+    # 10000000;
+    stop_simulation = 1;
+    
+    $fclose(outfd);
+    $fclose(infd);
+    $display("Time is up, stop simulation.");
+    $finish;
+end
+
 
 endmodule

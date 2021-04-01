@@ -40,6 +40,7 @@ add_files $src_dir/standalone_tcp
 # NOTE: in os.sv
 #
 set_property top snic_tcp_top [current_fileset]
+set_property top test_snic_tcp_top [get_filesets sim_1]
 
 #add_files -fileset constrs_1 $constraints_dir/${DEVICE_NAME}.xdc
 update_compile_order -fileset sources_1

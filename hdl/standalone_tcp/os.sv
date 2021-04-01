@@ -9,22 +9,21 @@ module snic_tcp_top #(
     parameter NUM_DDR_CHANNELS = 1,
     parameter ENABLE_DDR = 1,
     parameter NUM_TCP_CHANNELS = 1
-) (
+)(
     input wire    mem_clk,
     input wire    mem_aresetn,
-    input wire      net_clk,
-    input wire      net_aresetn,
+    input wire    net_clk,
+    input wire    net_aresetn,
 
-    // TCP Network
+    // Data to/from TCP module
     axi_stream.slave    s_axis_net_rx,
     axi_stream.master   m_axis_net_tx,
 
     // snic_handler Network
-    // traffic from or to endpoint
+    // Data to/from Endpoint
     axi_stream.slave    s_axis_net_rx_from_endpoint,
     axi_stream.master   m_axis_net_tx_to_endpoint,
 
-    // Slave Interface Write Address Ports
     output logic [AXI_ID_WIDTH-1:0]                 m_axi_awid  [NUM_DDR_CHANNELS-1:0],
     output logic [31:0]                             m_axi_awaddr    [NUM_DDR_CHANNELS-1:0],
     output logic [7:0]                              m_axi_awlen [NUM_DDR_CHANNELS-1:0],
@@ -33,20 +32,17 @@ module snic_tcp_top #(
     output logic [0:0]                              m_axi_awlock    [NUM_DDR_CHANNELS-1:0],
     output logic [3:0]                              m_axi_awcache   [NUM_DDR_CHANNELS-1:0],
     output logic [2:0]                              m_axi_awprot    [NUM_DDR_CHANNELS-1:0],
-    output logic[NUM_DDR_CHANNELS-1:0]                                    m_axi_awvalid,
-    input wire[NUM_DDR_CHANNELS-1:0]                                      m_axi_awready,
-    // Slave Interface Write Data Ports
+    output logic[NUM_DDR_CHANNELS-1:0]              m_axi_awvalid,
+    input wire[NUM_DDR_CHANNELS-1:0]                m_axi_awready,
     output logic [511:0]                            m_axi_wdata [NUM_DDR_CHANNELS-1:0],
     output logic [63:0]                             m_axi_wstrb [NUM_DDR_CHANNELS-1:0],
-    output logic[NUM_DDR_CHANNELS-1:0]                                    m_axi_wlast,
-    output logic[NUM_DDR_CHANNELS-1:0]                                    m_axi_wvalid,
-    input wire[NUM_DDR_CHANNELS-1:0]                                      m_axi_wready,
-    // Slave Interface Write Response Ports
-    output logic[NUM_DDR_CHANNELS-1:0]                                    m_axi_bready,
+    output logic[NUM_DDR_CHANNELS-1:0]              m_axi_wlast,
+    output logic[NUM_DDR_CHANNELS-1:0]              m_axi_wvalid,
+    input wire[NUM_DDR_CHANNELS-1:0]                m_axi_wready,
+    output logic[NUM_DDR_CHANNELS-1:0]              m_axi_bready,
     input wire [AXI_ID_WIDTH-1:0]                   m_axi_bid   [NUM_DDR_CHANNELS-1:0],
     input wire [1:0]                                m_axi_bresp [NUM_DDR_CHANNELS-1:0],
-    input wire[NUM_DDR_CHANNELS-1:0]                                      m_axi_bvalid,
-    // Slave Interface Read Address Ports
+    input wire[NUM_DDR_CHANNELS-1:0]                m_axi_bvalid,
     output logic [AXI_ID_WIDTH-1:0]                 m_axi_arid  [NUM_DDR_CHANNELS-1:0],
     output logic [31:0]                             m_axi_araddr    [NUM_DDR_CHANNELS-1:0],
     output logic [7:0]                              m_axi_arlen [NUM_DDR_CHANNELS-1:0],
@@ -55,22 +51,20 @@ module snic_tcp_top #(
     output logic [0:0]                              m_axi_arlock    [NUM_DDR_CHANNELS-1:0],
     output logic [3:0]                              m_axi_arcache   [NUM_DDR_CHANNELS-1:0],
     output logic [2:0]                              m_axi_arprot    [NUM_DDR_CHANNELS-1:0],
-    output logic[NUM_DDR_CHANNELS-1:0]                                    m_axi_arvalid,
-    input wire[NUM_DDR_CHANNELS-1:0]                                      m_axi_arready,
-    // Slave Interface Read Data Ports
-    output logic[NUM_DDR_CHANNELS-1:0]                                    m_axi_rready,
+    output logic[NUM_DDR_CHANNELS-1:0]              m_axi_arvalid,
+    input wire[NUM_DDR_CHANNELS-1:0]                m_axi_arready,
+    output logic[NUM_DDR_CHANNELS-1:0]              m_axi_rready,
     input wire [AXI_ID_WIDTH-1:0]                   m_axi_rid   [NUM_DDR_CHANNELS-1:0],
     input wire [511:0]                              m_axi_rdata [NUM_DDR_CHANNELS-1:0],
     input wire [1:0]                                m_axi_rresp [NUM_DDR_CHANNELS-1:0],
-    input wire[NUM_DDR_CHANNELS-1:0]                                      m_axi_rlast,
-    input wire[NUM_DDR_CHANNELS-1:0]                                      m_axi_rvalid
+    input wire[NUM_DDR_CHANNELS-1:0]                m_axi_rlast,
+    input wire[NUM_DDR_CHANNELS-1:0]                m_axi_rvalid
 );
 
 // Memory Signals
 axis_mem_cmd    axis_mem_read_cmd[NUM_DDR_CHANNELS]();
 axi_stream      axis_mem_read_data[NUM_DDR_CHANNELS]();
 axis_mem_status axis_mem_read_status[NUM_DDR_CHANNELS](); 
-
 axis_mem_cmd    axis_mem_write_cmd[NUM_DDR_CHANNELS]();
 axi_stream      axis_mem_write_data[NUM_DDR_CHANNELS]();
 axis_mem_status axis_mem_write_status[NUM_DDR_CHANNELS]();
@@ -79,7 +73,6 @@ axis_mem_status axis_mem_write_status[NUM_DDR_CHANNELS]();
 axis_mem_cmd    axis_tcp_mem_read_cmd[NUM_TCP_CHANNELS]();
 axi_stream      axis_tcp_mem_read_data[NUM_TCP_CHANNELS]();
 axis_mem_status axis_tcp_mem_read_status[NUM_TCP_CHANNELS](); 
-
 axis_mem_cmd    axis_tcp_mem_write_cmd[NUM_TCP_CHANNELS]();
 axi_stream      axis_tcp_mem_write_data[NUM_TCP_CHANNELS]();
 axis_mem_status axis_tcp_mem_write_status[NUM_TCP_CHANNELS]();
@@ -91,13 +84,14 @@ axis_meta #(.WIDTH(24))     axis_tcp_open_status();
 axis_meta #(.WIDTH(16))     axis_tcp_close_connection();
 axis_meta #(.WIDTH(88))     axis_tcp_notification();
 axis_meta #(.WIDTH(32))     axis_tcp_read_package();
-
 axis_meta #(.WIDTH(16))     axis_tcp_rx_metadata();
 axi_stream #(.WIDTH(NETWORK_STACK_WIDTH))    axis_tcp_rx_data();
 axis_meta #(.WIDTH(32))     axis_tcp_tx_metadata();
 axi_stream #(.WIDTH(NETWORK_STACK_WIDTH))    axis_tcp_tx_data();
 axis_meta #(.WIDTH(64))     axis_tcp_tx_status();
 
+// This is our snic_handler
+// Accepting data from endpoint then talk to tcp module
 role_wrapper user_role_wrapper (
     .net_clk(net_clk),
     .net_aresetn(net_aresetn),
@@ -105,6 +99,8 @@ role_wrapper user_role_wrapper (
     .s_axis_net_rx_from_endpoint(s_axis_net_rx_from_endpoint),
     .m_axis_net_tx_to_endpoint(m_axis_net_tx_to_endpoint),
 
+    // There is a certain protocol
+    // check README.md
     .m_axis_listen_port(axis_tcp_listen_port),
     .s_axis_listen_port_status(axis_tcp_listen_port_status),
     .m_axis_open_connection(axis_tcp_open_connection),
@@ -119,6 +115,7 @@ role_wrapper user_role_wrapper (
     .s_axis_tx_status(axis_tcp_tx_status)
 );
 
+// This is the TCP stack
 network_stack #(
     .WIDTH(NETWORK_STACK_WIDTH),
     .TCP_EN(TCP_STACK_EN),
@@ -128,12 +125,13 @@ network_stack #(
 ) tcp_stack_inst (
     .net_clk(net_clk),
     .net_aresetn(net_aresetn),
-    
-    //Streams from/to Network interface
+
+    // TCP data channels
+    // data coming out from TCP has <IP, TCP, payload>
     .m_axis_net(m_axis_net_tx),
     .s_axis_net(s_axis_net_rx),
 
-    //TCP/IP interface
+    // TCP access DRAM
     .m_axis_read_cmd(axis_tcp_mem_read_cmd),
     .m_axis_write_cmd(axis_tcp_mem_write_cmd),
     .s_axis_read_sts(axis_tcp_mem_read_status),
@@ -141,6 +139,7 @@ network_stack #(
     .s_axis_read_data(axis_tcp_mem_read_data),
     .m_axis_write_data(axis_tcp_mem_write_data),
    
+    // TCP control signals
     .s_axis_listen_port(axis_tcp_listen_port),
     .m_axis_listen_port_status(axis_tcp_listen_port_status),
 
@@ -160,8 +159,11 @@ network_stack #(
 );
 
 /*
- * Switch DRAM access between TCP/IP stack and User Role
+ * NOTE: With out modified version, the NUM_DDR_CHANNELS is always 1.
+ * Only TCP needs to acccess DRAM. The snic_handler does not.
  *
+ * Old comment:
+ * Switch DRAM access between TCP stack and User Role
  * NUM_DDR_CHANNELS = 1
  * NUM_TCP_CHANNELS = 1
  */

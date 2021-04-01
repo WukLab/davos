@@ -387,198 +387,198 @@ endgenerate
 /*
  * DDR Statistics
  */ 
-logic[31:0] user_write_cmd_counter;
-logic[31:0] user_write_sts_counter;
-logic[31:0] user_write_sts_error_counter;
-logic[31:0] user_read_cmd_counter;
-logic[31:0] user_read_sts_counter;
-logic[31:0] user_read_sts_error_counter;
-
-logic[31:0] write_cmd_counter;
-//logic[47:0] write_cmd_length_counter;
-logic[31:0] write_word_counter;
-logic[31:0] write_pkg_counter;
-logic[47:0] write_length_counter;
-logic[31:0] write_sts_counter;
-logic[31:0] write_sts_error_counter;
-
-logic[31:0] read_cmd_counter;
-// logic[47:0] read_cmd_length_counter;
-logic[31:0] read_word_counter;
-logic[31:0] read_pkg_counter;
-logic[47:0] read_length_counter;
-logic[31:0] read_sts_counter;
-logic[31:0] read_sts_error_counter;
-
-
-always @(posedge user_clk)
-begin
-    if (~user_aresetn) begin
-        user_write_cmd_counter <= '0;
-        user_write_sts_counter <= '0;
-        user_write_sts_error_counter <= '0;
-        user_read_cmd_counter <= '0;
-        user_read_sts_counter <= '0;
-        user_read_sts_error_counter <= '0;
-    end
-    else begin
-        if (axis_to_dm_mem_write_cmd_tvalid && axis_to_dm_mem_write_cmd_tready) begin
-            user_write_cmd_counter <= user_write_cmd_counter + 1;
-        end
-        if (m_axis_mem_write_status.valid && m_axis_mem_write_status.ready) begin
-            user_write_sts_counter <= user_write_sts_counter + 1;
-            //Check if error occured
-            if (m_axis_mem_write_status.data[7] != 1'b1) begin
-                user_write_sts_error_counter <= user_write_sts_error_counter;
-            end
-        end
-        if (axis_to_dm_mem_read_cmd_tvalid && axis_to_dm_mem_read_cmd_tready) begin
-            user_read_cmd_counter <= user_read_cmd_counter + 1;
-        end
-        if (m_axis_mem_read_status.valid && m_axis_mem_read_status.ready) begin
-            user_read_sts_counter <= user_read_sts_counter + 1;
-            //Check if error occured
-            if (m_axis_mem_read_status.data[7] != 1'b1) begin
-                user_read_sts_error_counter <= user_read_sts_error_counter;
-            end
-        end
-
-    end
-end
-
-always @(posedge mem_clk)
-begin
-    if (~mem_aresetn) begin
-        write_word_counter <= '0;
-        write_pkg_counter <= '0;
-        write_length_counter <= '0;
-        read_word_counter <= '0;
-        read_pkg_counter <= '0;
-        read_length_counter <= '0;
-    end
-    else begin
-        if (axis_mem_cc_to_dm_write_tvalid && axis_mem_cc_to_dm_write_tready) begin
-            write_word_counter <= write_word_counter + 1;
-            if (axis_mem_cc_to_dm_write_tlast) begin
-                write_pkg_counter <= write_pkg_counter + 1;
-            end
-            //Assumes multiple of 8
-            case (axis_mem_cc_to_dm_write_tkeep)
-                64'hFF: write_length_counter <= write_length_counter + 8;
-                64'hFFFF: write_length_counter <= write_length_counter + 16;
-                64'hFFFFFF: write_length_counter <= write_length_counter + 24;
-                64'hFFFFFFFF: write_length_counter <= write_length_counter + 32;
-                64'hFFFFFFFFFF: write_length_counter <= write_length_counter + 40;
-                64'hFFFFFFFFFFFF: write_length_counter <= write_length_counter + 48;
-                64'hFFFFFFFFFFFFFF: write_length_counter <= write_length_counter + 56;
-                64'hFFFFFFFFFFFFFFFF: write_length_counter <= write_length_counter + 64;
-            endcase
-        end
-        if (axis_mem_dm_to_cc_read_tvalid && axis_mem_dm_to_cc_read_tready) begin
-            read_word_counter <= read_word_counter + 1;
-            if (axis_mem_dm_to_cc_read_tlast) begin
-                read_pkg_counter <= read_pkg_counter + 1;
-            end
-            //Assumes multiple of 8
-            case (axis_mem_dm_to_cc_read_tkeep)
-                64'hFF: read_length_counter <= read_length_counter + 8;
-                64'hFFFF: read_length_counter <= read_length_counter + 16;
-                64'hFFFFFF: read_length_counter <= read_length_counter + 24;
-                64'hFFFFFFFF: read_length_counter <= read_length_counter + 32;
-                64'hFFFFFFFFFF: read_length_counter <= read_length_counter + 40;
-                64'hFFFFFFFFFFFF: read_length_counter <= read_length_counter + 48;
-                64'hFFFFFFFFFFFFFF: read_length_counter <= read_length_counter + 56;
-                64'hFFFFFFFFFFFFFFFF: read_length_counter <= read_length_counter + 64;
-            endcase
-        end
-    end
-end
-
-
-// Clock Conversions
-axis_clock_converter_32 axis_clock_converter_write_cmd_counter (
-   .s_axis_aresetn(user_aresetn),
-   .s_axis_aclk(user_clk),
-   .s_axis_tvalid(1'b1),
-   .s_axis_tready(),
-   .s_axis_tdata(user_write_cmd_counter),
-   
-   .m_axis_aclk(mem_clk),
-   .m_axis_aresetn(mem_aresetn),
-   .m_axis_tvalid(),
-   .m_axis_tready(1'b1),
-   .m_axis_tdata(write_cmd_counter)
- );
-
-axis_clock_converter_32 axis_clock_converter_write_sts_counter (
-   .s_axis_aresetn(user_aresetn),
-   .s_axis_aclk(user_clk),
-   .s_axis_tvalid(1'b1),
-   .s_axis_tready(),
-   .s_axis_tdata(user_write_sts_counter),
-   
-   .m_axis_aclk(mem_clk),
-   .m_axis_aresetn(mem_aresetn),
-   .m_axis_tvalid(),
-   .m_axis_tready(1'b1),
-   .m_axis_tdata(write_sts_counter)
- );
-
-axis_clock_converter_32 axis_clock_converter_write_sts_error_counter (
-   .s_axis_aresetn(user_aresetn),
-   .s_axis_aclk(user_clk),
-   .s_axis_tvalid(1'b1),
-   .s_axis_tready(),
-   .s_axis_tdata(user_write_sts_error_counter),
-   
-   .m_axis_aclk(mem_clk),
-   .m_axis_aresetn(mem_aresetn),
-   .m_axis_tvalid(),
-   .m_axis_tready(1'b1),
-   .m_axis_tdata(write_sts_error_counter)
- );
-
-axis_clock_converter_32 axis_clock_converter_read_cmd_counter (
-   .s_axis_aresetn(user_aresetn),
-   .s_axis_aclk(user_clk),
-   .s_axis_tvalid(1'b1),
-   .s_axis_tready(),
-   .s_axis_tdata(user_read_cmd_counter),
-   
-   .m_axis_aclk(mem_clk),
-   .m_axis_aresetn(mem_aresetn),
-   .m_axis_tvalid(),
-   .m_axis_tready(1'b1),
-   .m_axis_tdata(read_cmd_counter)
- );
-
-axis_clock_converter_32 axis_clock_converter_read_sts_counter (
-   .s_axis_aresetn(user_aresetn),
-   .s_axis_aclk(user_clk),
-   .s_axis_tvalid(1'b1),
-   .s_axis_tready(),
-   .s_axis_tdata(user_read_sts_counter),
-   
-   .m_axis_aclk(mem_clk),
-   .m_axis_aresetn(mem_aresetn),
-   .m_axis_tvalid(),
-   .m_axis_tready(1'b1),
-   .m_axis_tdata(read_sts_counter)
- );
-
-axis_clock_converter_32 axis_clock_converter_read_sts_error_counter (
-   .s_axis_aresetn(user_aresetn),
-   .s_axis_aclk(user_clk),
-   .s_axis_tvalid(1'b1),
-   .s_axis_tready(),
-   .s_axis_tdata(user_read_sts_error_counter),
-   
-   .m_axis_aclk(mem_clk),
-   .m_axis_aresetn(mem_aresetn),
-   .m_axis_tvalid(),
-   .m_axis_tready(1'b1),
-   .m_axis_tdata(read_sts_error_counter)
- );
+/* logic[31:0] user_write_cmd_counter; */
+/* logic[31:0] user_write_sts_counter; */
+/* logic[31:0] user_write_sts_error_counter; */
+/* logic[31:0] user_read_cmd_counter; */
+/* logic[31:0] user_read_sts_counter; */
+/* logic[31:0] user_read_sts_error_counter; */
+/*  */
+/* logic[31:0] write_cmd_counter; */
+/* //logic[47:0] write_cmd_length_counter; */
+/* logic[31:0] write_word_counter; */
+/* logic[31:0] write_pkg_counter; */
+/* logic[47:0] write_length_counter; */
+/* logic[31:0] write_sts_counter; */
+/* logic[31:0] write_sts_error_counter; */
+/*  */
+/* logic[31:0] read_cmd_counter; */
+/* // logic[47:0] read_cmd_length_counter; */
+/* logic[31:0] read_word_counter; */
+/* logic[31:0] read_pkg_counter; */
+/* logic[47:0] read_length_counter; */
+/* logic[31:0] read_sts_counter; */
+/* logic[31:0] read_sts_error_counter; */
+/*  */
+/*  */
+/* always @(posedge user_clk) */
+/* begin */
+/*     if (~user_aresetn) begin */
+/*         user_write_cmd_counter <= '0; */
+/*         user_write_sts_counter <= '0; */
+/*         user_write_sts_error_counter <= '0; */
+/*         user_read_cmd_counter <= '0; */
+/*         user_read_sts_counter <= '0; */
+/*         user_read_sts_error_counter <= '0; */
+/*     end */
+/*     else begin */
+/*         if (axis_to_dm_mem_write_cmd_tvalid && axis_to_dm_mem_write_cmd_tready) begin */
+/*             user_write_cmd_counter <= user_write_cmd_counter + 1; */
+/*         end */
+/*         if (m_axis_mem_write_status.valid && m_axis_mem_write_status.ready) begin */
+/*             user_write_sts_counter <= user_write_sts_counter + 1; */
+/*             //Check if error occured */
+/*             if (m_axis_mem_write_status.data[7] != 1'b1) begin */
+/*                 user_write_sts_error_counter <= user_write_sts_error_counter; */
+/*             end */
+/*         end */
+/*         if (axis_to_dm_mem_read_cmd_tvalid && axis_to_dm_mem_read_cmd_tready) begin */
+/*             user_read_cmd_counter <= user_read_cmd_counter + 1; */
+/*         end */
+/*         if (m_axis_mem_read_status.valid && m_axis_mem_read_status.ready) begin */
+/*             user_read_sts_counter <= user_read_sts_counter + 1; */
+/*             //Check if error occured */
+/*             if (m_axis_mem_read_status.data[7] != 1'b1) begin */
+/*                 user_read_sts_error_counter <= user_read_sts_error_counter; */
+/*             end */
+/*         end */
+/*  */
+/*     end */
+/* end */
+/*  */
+/* always @(posedge mem_clk) */
+/* begin */
+/*     if (~mem_aresetn) begin */
+/*         write_word_counter <= '0; */
+/*         write_pkg_counter <= '0; */
+/*         write_length_counter <= '0; */
+/*         read_word_counter <= '0; */
+/*         read_pkg_counter <= '0; */
+/*         read_length_counter <= '0; */
+/*     end */
+/*     else begin */
+/*         if (axis_mem_cc_to_dm_write_tvalid && axis_mem_cc_to_dm_write_tready) begin */
+/*             write_word_counter <= write_word_counter + 1; */
+/*             if (axis_mem_cc_to_dm_write_tlast) begin */
+/*                 write_pkg_counter <= write_pkg_counter + 1; */
+/*             end */
+/*             //Assumes multiple of 8 */
+/*             case (axis_mem_cc_to_dm_write_tkeep) */
+/*                 64'hFF: write_length_counter <= write_length_counter + 8; */
+/*                 64'hFFFF: write_length_counter <= write_length_counter + 16; */
+/*                 64'hFFFFFF: write_length_counter <= write_length_counter + 24; */
+/*                 64'hFFFFFFFF: write_length_counter <= write_length_counter + 32; */
+/*                 64'hFFFFFFFFFF: write_length_counter <= write_length_counter + 40; */
+/*                 64'hFFFFFFFFFFFF: write_length_counter <= write_length_counter + 48; */
+/*                 64'hFFFFFFFFFFFFFF: write_length_counter <= write_length_counter + 56; */
+/*                 64'hFFFFFFFFFFFFFFFF: write_length_counter <= write_length_counter + 64; */
+/*             endcase */
+/*         end */
+/*         if (axis_mem_dm_to_cc_read_tvalid && axis_mem_dm_to_cc_read_tready) begin */
+/*             read_word_counter <= read_word_counter + 1; */
+/*             if (axis_mem_dm_to_cc_read_tlast) begin */
+/*                 read_pkg_counter <= read_pkg_counter + 1; */
+/*             end */
+/*             //Assumes multiple of 8 */
+/*             case (axis_mem_dm_to_cc_read_tkeep) */
+/*                 64'hFF: read_length_counter <= read_length_counter + 8; */
+/*                 64'hFFFF: read_length_counter <= read_length_counter + 16; */
+/*                 64'hFFFFFF: read_length_counter <= read_length_counter + 24; */
+/*                 64'hFFFFFFFF: read_length_counter <= read_length_counter + 32; */
+/*                 64'hFFFFFFFFFF: read_length_counter <= read_length_counter + 40; */
+/*                 64'hFFFFFFFFFFFF: read_length_counter <= read_length_counter + 48; */
+/*                 64'hFFFFFFFFFFFFFF: read_length_counter <= read_length_counter + 56; */
+/*                 64'hFFFFFFFFFFFFFFFF: read_length_counter <= read_length_counter + 64; */
+/*             endcase */
+/*         end */
+/*     end */
+/* end */
+/*  */
+/*  */
+/* // Clock Conversions */
+/* axis_clock_converter_32 axis_clock_converter_write_cmd_counter ( */
+/*    .s_axis_aresetn(user_aresetn), */
+/*    .s_axis_aclk(user_clk), */
+/*    .s_axis_tvalid(1'b1), */
+/*    .s_axis_tready(), */
+/*    .s_axis_tdata(user_write_cmd_counter), */
+/*     */
+/*    .m_axis_aclk(mem_clk), */
+/*    .m_axis_aresetn(mem_aresetn), */
+/*    .m_axis_tvalid(), */
+/*    .m_axis_tready(1'b1), */
+/*    .m_axis_tdata(write_cmd_counter) */
+/*  ); */
+/*  */
+/* axis_clock_converter_32 axis_clock_converter_write_sts_counter ( */
+/*    .s_axis_aresetn(user_aresetn), */
+/*    .s_axis_aclk(user_clk), */
+/*    .s_axis_tvalid(1'b1), */
+/*    .s_axis_tready(), */
+/*    .s_axis_tdata(user_write_sts_counter), */
+/*     */
+/*    .m_axis_aclk(mem_clk), */
+/*    .m_axis_aresetn(mem_aresetn), */
+/*    .m_axis_tvalid(), */
+/*    .m_axis_tready(1'b1), */
+/*    .m_axis_tdata(write_sts_counter) */
+/*  ); */
+/*  */
+/* axis_clock_converter_32 axis_clock_converter_write_sts_error_counter ( */
+/*    .s_axis_aresetn(user_aresetn), */
+/*    .s_axis_aclk(user_clk), */
+/*    .s_axis_tvalid(1'b1), */
+/*    .s_axis_tready(), */
+/*    .s_axis_tdata(user_write_sts_error_counter), */
+/*     */
+/*    .m_axis_aclk(mem_clk), */
+/*    .m_axis_aresetn(mem_aresetn), */
+/*    .m_axis_tvalid(), */
+/*    .m_axis_tready(1'b1), */
+/*    .m_axis_tdata(write_sts_error_counter) */
+/*  ); */
+/*  */
+/* axis_clock_converter_32 axis_clock_converter_read_cmd_counter ( */
+/*    .s_axis_aresetn(user_aresetn), */
+/*    .s_axis_aclk(user_clk), */
+/*    .s_axis_tvalid(1'b1), */
+/*    .s_axis_tready(), */
+/*    .s_axis_tdata(user_read_cmd_counter), */
+/*     */
+/*    .m_axis_aclk(mem_clk), */
+/*    .m_axis_aresetn(mem_aresetn), */
+/*    .m_axis_tvalid(), */
+/*    .m_axis_tready(1'b1), */
+/*    .m_axis_tdata(read_cmd_counter) */
+/*  ); */
+/*  */
+/* axis_clock_converter_32 axis_clock_converter_read_sts_counter ( */
+/*    .s_axis_aresetn(user_aresetn), */
+/*    .s_axis_aclk(user_clk), */
+/*    .s_axis_tvalid(1'b1), */
+/*    .s_axis_tready(), */
+/*    .s_axis_tdata(user_read_sts_counter), */
+/*     */
+/*    .m_axis_aclk(mem_clk), */
+/*    .m_axis_aresetn(mem_aresetn), */
+/*    .m_axis_tvalid(), */
+/*    .m_axis_tready(1'b1), */
+/*    .m_axis_tdata(read_sts_counter) */
+/*  ); */
+/*  */
+/* axis_clock_converter_32 axis_clock_converter_read_sts_error_counter ( */
+/*    .s_axis_aresetn(user_aresetn), */
+/*    .s_axis_aclk(user_clk), */
+/*    .s_axis_tvalid(1'b1), */
+/*    .s_axis_tready(), */
+/*    .s_axis_tdata(user_read_sts_error_counter), */
+/*     */
+/*    .m_axis_aclk(mem_clk), */
+/*    .m_axis_aresetn(mem_aresetn), */
+/*    .m_axis_tvalid(), */
+/*    .m_axis_tready(1'b1), */
+/*    .m_axis_tdata(read_sts_error_counter) */
+/*  ); */
 
 endmodule
 

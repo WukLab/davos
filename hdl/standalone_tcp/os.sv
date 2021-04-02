@@ -90,9 +90,9 @@ axis_meta #(.WIDTH(32))     axis_tcp_tx_metadata();
 axi_stream #(.WIDTH(NETWORK_STACK_WIDTH))    axis_tcp_tx_data();
 axis_meta #(.WIDTH(64))     axis_tcp_tx_status();
 
-// This is our snic_handler
-// Accepting data from endpoint then talk to tcp module
-role_wrapper user_role_wrapper (
+// snic_handler
+// Accepting data from _endpoint_
+snic_handler_wrapper snic_handler_wrapper_ip (
     .net_clk(net_clk),
     .net_aresetn(net_aresetn),
 

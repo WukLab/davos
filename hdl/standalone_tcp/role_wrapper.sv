@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 `default_nettype none
 
-module role_wrapper (
+module snic_handler_wrapper (
     input wire      net_clk,
     input wire      net_aresetn,
     

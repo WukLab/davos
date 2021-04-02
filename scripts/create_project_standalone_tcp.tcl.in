@@ -51,6 +51,8 @@ file mkdir $device_ip_dir
 
 #Create IPs
 
+source ${CMAKE_CURRENT_SOURCE_DIR}/scripts/create_bd.tcl
+
 #Network interface
 #source ${CMAKE_CURRENT_SOURCE_DIR}/scripts/network_${FPGA_FAMILY}.tcl
 

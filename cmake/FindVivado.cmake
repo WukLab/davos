@@ -23,6 +23,7 @@ else()
 
   get_filename_component(VIVADO_ROOT_DIR ${VIVADO_PATH} DIRECTORY)
 
+  set(VIVADO_ROOT_DIR, /tools/Xilinx/Vivado/2019.1/)
   set(VIVADO_FOUND TRUE)
   set(VIVADO_BINARY ${VIVADO_ROOT_DIR}/bin/vivado)
 

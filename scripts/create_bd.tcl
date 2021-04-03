@@ -123,8 +123,10 @@ set bCheckIPsPassed 1
 set bCheckIPs 1
 if { $bCheckIPs == 1 } {
    set list_check_ips "\ 
+user.org:user:TcpWrapper:1.0\
 wuklab.io:user:snic_tcp_top:1.0\
 wuklab.io:hls:snic_tcp_wrapper:1.0\
+xilinx.com:ip:util_vector_logic:2.0\
 "
 
    set list_ips_missing ""
@@ -207,6 +209,37 @@ proc create_root_design { parentCell } {
 
   set m_axis_net_tx_to_endpoint_0 [ create_bd_intf_port -mode Master -vlnv wuklab.io:interface:axi_stream_rtl:1.0 m_axis_net_tx_to_endpoint_0 ]
 
+  set s_axi_0 [ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:aximm_rtl:1.0 s_axi_0 ]
+  set_property -dict [ list \
+   CONFIG.ADDR_WIDTH {32} \
+   CONFIG.ARUSER_WIDTH {0} \
+   CONFIG.AWUSER_WIDTH {0} \
+   CONFIG.BUSER_WIDTH {0} \
+   CONFIG.DATA_WIDTH {32} \
+   CONFIG.HAS_BRESP {1} \
+   CONFIG.HAS_BURST {1} \
+   CONFIG.HAS_CACHE {0} \
+   CONFIG.HAS_LOCK {0} \
+   CONFIG.HAS_PROT {0} \
+   CONFIG.HAS_QOS {0} \
+   CONFIG.HAS_REGION {0} \
+   CONFIG.HAS_RRESP {1} \
+   CONFIG.HAS_WSTRB {1} \
+   CONFIG.ID_WIDTH {16} \
+   CONFIG.MAX_BURST_LENGTH {256} \
+   CONFIG.NUM_READ_OUTSTANDING {2} \
+   CONFIG.NUM_READ_THREADS {1} \
+   CONFIG.NUM_WRITE_OUTSTANDING {2} \
+   CONFIG.NUM_WRITE_THREADS {1} \
+   CONFIG.PROTOCOL {AXI4} \
+   CONFIG.READ_WRITE_MODE {READ_WRITE} \
+   CONFIG.RUSER_BITS_PER_BYTE {0} \
+   CONFIG.RUSER_WIDTH {0} \
+   CONFIG.SUPPORTS_NARROW_BURST {1} \
+   CONFIG.WUSER_BITS_PER_BYTE {0} \
+   CONFIG.WUSER_WIDTH {0} \
+   ] $s_axi_0
+
   set s_axis_net_rx_0 [ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:axis_rtl:1.0 s_axis_net_rx_0 ]
   set_property -dict [ list \
    CONFIG.FREQ_HZ {100000000} \
@@ -234,9 +267,12 @@ proc create_root_design { parentCell } {
   set net_aresetn_0 [ create_bd_port -dir I -type rst net_aresetn_0 ]
   set net_clk_0 [ create_bd_port -dir I -type clk -freq_hz 100000000 net_clk_0 ]
   set_property -dict [ list \
-   CONFIG.ASSOCIATED_BUSIF {s_axis_net_rx_0:m_axis_net_tx_0} \
+   CONFIG.ASSOCIATED_BUSIF {s_axis_net_rx_0:m_axis_net_tx_0:s_axi_0} \
    CONFIG.ASSOCIATED_RESET {net_aresetn_0} \
  ] $net_clk_0
+
+  # Create instance: TcpWrapper_0, and set properties
+  set TcpWrapper_0 [ create_bd_cell -type ip -vlnv user.org:user:TcpWrapper:1.0 TcpWrapper_0 ]
 
   # Create instance: snic_tcp_top_0, and set properties
   set snic_tcp_top_0 [ create_bd_cell -type ip -vlnv wuklab.io:user:snic_tcp_top:1.0 snic_tcp_top_0 ]
@@ -244,18 +280,28 @@ proc create_root_design { parentCell } {
   # Create instance: snic_tcp_wrapper_0, and set properties
   set snic_tcp_wrapper_0 [ create_bd_cell -type ip -vlnv wuklab.io:hls:snic_tcp_wrapper:1.0 snic_tcp_wrapper_0 ]
 
+  # Create instance: util_vector_logic_0, and set properties
+  set util_vector_logic_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:util_vector_logic:2.0 util_vector_logic_0 ]
+  set_property -dict [ list \
+   CONFIG.C_OPERATION {not} \
+   CONFIG.LOGO_FILE {data/sym_notgate.png} \
+ ] $util_vector_logic_0
+
   # Create interface connections
+  connect_bd_intf_net -intf_net TcpWrapper_0_fromTCP_out [get_bd_intf_ports m_axis_net_tx_0] [get_bd_intf_pins TcpWrapper_0/fromTCP_out]
+  connect_bd_intf_net -intf_net TcpWrapper_0_toTCP_out [get_bd_intf_pins TcpWrapper_0/toTCP_out] [get_bd_intf_pins snic_tcp_wrapper_0/s_axis_totcp_in]
+  connect_bd_intf_net -intf_net axi_0_1 [get_bd_intf_ports s_axi_0] [get_bd_intf_pins TcpWrapper_0/axi]
+  connect_bd_intf_net -intf_net s_axis_net_rx_0_1 [get_bd_intf_ports s_axis_net_rx_0] [get_bd_intf_pins TcpWrapper_0/toTCP_in]
   connect_bd_intf_net -intf_net s_axis_net_rx_from_endpoint_0_1 [get_bd_intf_ports s_axis_net_rx_from_endpoint_0] [get_bd_intf_pins snic_tcp_top_0/s_axis_net_rx_from_endpoint]
-  connect_bd_intf_net -intf_net s_axis_totcp_in_0_1 [get_bd_intf_ports s_axis_net_rx_0] [get_bd_intf_pins snic_tcp_wrapper_0/s_axis_totcp_in]
   connect_bd_intf_net -intf_net snic_tcp_top_0_m_axi [get_bd_intf_ports m_axi_0] [get_bd_intf_pins snic_tcp_top_0/m_axi]
   connect_bd_intf_net -intf_net snic_tcp_top_0_m_axis_net_tx_to_endpoint [get_bd_intf_ports m_axis_net_tx_to_endpoint_0] [get_bd_intf_pins snic_tcp_top_0/m_axis_net_tx_to_endpoint]
-  connect_bd_intf_net -intf_net snic_tcp_wrapper_0_m_axis_fromtcp_out [get_bd_intf_ports m_axis_net_tx_0] [get_bd_intf_pins snic_tcp_wrapper_0/m_axis_fromtcp_out]
+  connect_bd_intf_net -intf_net snic_tcp_wrapper_0_m_axis_fromtcp_out [get_bd_intf_pins TcpWrapper_0/fromTCP_in] [get_bd_intf_pins snic_tcp_wrapper_0/m_axis_fromtcp_out]
 
   # Create port connections
   connect_bd_net -net mem_aresetn_0_1 [get_bd_ports mem_aresetn_0] [get_bd_pins snic_tcp_top_0/mem_aresetn]
   connect_bd_net -net mem_clk_0_1 [get_bd_ports mem_clk_0] [get_bd_pins snic_tcp_top_0/mem_clk]
-  connect_bd_net -net net_aresetn_0_1 [get_bd_ports net_aresetn_0] [get_bd_pins snic_tcp_top_0/net_aresetn] [get_bd_pins snic_tcp_wrapper_0/ap_rst_n]
-  connect_bd_net -net net_clk_0_1 [get_bd_ports net_clk_0] [get_bd_pins snic_tcp_top_0/net_clk] [get_bd_pins snic_tcp_wrapper_0/ap_clk]
+  connect_bd_net -net net_aresetn_0_1 [get_bd_ports net_aresetn_0] [get_bd_pins snic_tcp_top_0/net_aresetn] [get_bd_pins snic_tcp_wrapper_0/ap_rst_n] [get_bd_pins util_vector_logic_0/Op1]
+  connect_bd_net -net net_clk_0_1 [get_bd_ports net_clk_0] [get_bd_pins TcpWrapper_0/clk] [get_bd_pins snic_tcp_top_0/net_clk] [get_bd_pins snic_tcp_wrapper_0/ap_clk]
   connect_bd_net -net snic_tcp_top_0_m_axis_net_tx_data [get_bd_pins snic_tcp_top_0/m_axis_net_tx_data] [get_bd_pins snic_tcp_wrapper_0/s_axis_fromtcp_in_TDATA]
   connect_bd_net -net snic_tcp_top_0_m_axis_net_tx_dest [get_bd_pins snic_tcp_top_0/m_axis_net_tx_dest] [get_bd_pins snic_tcp_wrapper_0/s_axis_fromtcp_in_TDEST]
   connect_bd_net -net snic_tcp_top_0_m_axis_net_tx_keep [get_bd_pins snic_tcp_top_0/m_axis_net_tx_keep] [get_bd_pins snic_tcp_wrapper_0/s_axis_fromtcp_in_TKEEP]
@@ -267,6 +313,7 @@ proc create_root_design { parentCell } {
   connect_bd_net -net snic_tcp_wrapper_0_m_axis_totcp_out_TLAST [get_bd_pins snic_tcp_top_0/s_axis_net_rx_last] [get_bd_pins snic_tcp_wrapper_0/m_axis_totcp_out_TLAST]
   connect_bd_net -net snic_tcp_wrapper_0_m_axis_totcp_out_TVALID [get_bd_pins snic_tcp_top_0/s_axis_net_rx_valid] [get_bd_pins snic_tcp_wrapper_0/m_axis_totcp_out_TVALID]
   connect_bd_net -net snic_tcp_wrapper_0_s_axis_fromtcp_in_TREADY [get_bd_pins snic_tcp_top_0/m_axis_net_tx_ready] [get_bd_pins snic_tcp_wrapper_0/s_axis_fromtcp_in_TREADY]
+  connect_bd_net -net util_vector_logic_0_Res [get_bd_pins TcpWrapper_0/reset] [get_bd_pins util_vector_logic_0/Res]
 
   # Create address segments
   assign_bd_address -offset 0x00000000 -range 0x000100000000 -target_address_space [get_bd_addr_spaces snic_tcp_top_0/m_axi] [get_bd_addr_segs m_axi_0/Reg] -force

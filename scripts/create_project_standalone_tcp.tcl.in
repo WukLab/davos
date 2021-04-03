@@ -23,7 +23,7 @@ set obj [get_projects $proj_name]
 set_property part {${FPGA_PART}} $obj
 set_property "target_language" "Verilog" $obj
 
-set_property IP_REPO_PATHS $lib_dir [current_fileset]
+set_property IP_REPO_PATHS {$lib_dir ../../../spinalhdl/generated_ip} [current_fileset]
 update_ip_catalog
 
 # Add include files
@@ -51,8 +51,6 @@ file mkdir $device_ip_dir
 
 #Create IPs
 
-source ${CMAKE_CURRENT_SOURCE_DIR}/scripts/create_bd.tcl
-
 #Network interface
 #source ${CMAKE_CURRENT_SOURCE_DIR}/scripts/network_${FPGA_FAMILY}.tcl
 
@@ -76,4 +74,9 @@ source ${CMAKE_CURRENT_SOURCE_DIR}/scripts/dram_${FPGA_FAMILY}.tcl
 #add_files $src_dir/role_wrapper.sv
 #source ${CMAKE_SOURCE_DIR}/scripts/${ROLE_NAME}.tcl
 
-ipx::package_project -root_dir "${CMAKE_SOURCE_DIR}/iprepo/snic_tcp" -vendor wuklab.io -library user -taxonomy /UserIP -import_files -set_current false
+ipx::package_project -root_dir "${CMAKE_SOURCE_DIR}/iprepo/snic_tcp"       -vendor wuklab.io -library user -taxonomy /UserIP -import_files -set_current false
+update_ip_catalog
+
+source ${CMAKE_CURRENT_SOURCE_DIR}/scripts/create_bd.tcl
+
+ipx::package_project -root_dir "${CMAKE_SOURCE_DIR}/iprepo/snic_top_final" -vendor wuklab.io -library user -taxonomy /UserIP -module design_1 -import_files

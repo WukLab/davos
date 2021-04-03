@@ -23,8 +23,10 @@ set obj [get_projects $proj_name]
 set_property part {${FPGA_PART}} $obj
 set_property "target_language" "Verilog" $obj
 
-set_property IP_REPO_PATHS {$lib_dir ../../../spinalhdl/generated_ip} [current_fileset]
-update_ip_catalog
+#set_property ip_repo_paths {$lib_dir ../../../spinalhdl/generated_ip} [current_fileset]
+puts $lib_dir
+set_property ip_repo_paths {../iprepo ../../../spinalhdl/generated_ip} [current_fileset]
+update_ip_catalog -rebuild
 
 # Add include files
 set_property include_dirs ${CMAKE_BINARY_DIR} [current_fileset]

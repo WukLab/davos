@@ -71,7 +71,7 @@ reg s_axis_net_rx_last;
 wire s_axis_net_rx_ready;
 reg s_axis_net_rx_valid;
 
-design_1 DUT (
+snic_tcp_top_final DUT (
     .mem_clk_0(clk_250mhz),
     .net_clk_0(clk_250mhz),
     .mem_aresetn_0(~clk_250mhz_rst),
@@ -113,18 +113,18 @@ design_1 DUT (
     .m_axi_0_wstrb(m_axi_wstrb),
     .m_axi_0_wvalid(m_axi_wvalid),
 
-    .m_axis_net_tx_0_tdata(m_axis_net_tx_data),
-    .m_axis_net_tx_0_tdest(m_axis_net_tx_dest),
-    .m_axis_net_tx_0_tkeep(m_axis_net_tx_keep),
-    .m_axis_net_tx_0_tlast(m_axis_net_tx_last),
-    .m_axis_net_tx_0_tready(m_axis_net_tx_ready),
-    .m_axis_net_tx_0_tvalid(m_axis_net_tx_valid),
+    .m_axis_tx_tcp_0_tdata(m_axis_net_tx_data),
+    .m_axis_tx_tcp_0_tdest(m_axis_net_tx_dest),
+    .m_axis_tx_tcp_0_tkeep(m_axis_net_tx_keep),
+    .m_axis_tx_tcp_0_tlast(m_axis_net_tx_last),
+    .m_axis_tx_tcp_0_tready(m_axis_net_tx_ready),
+    .m_axis_tx_tcp_0_tvalid(m_axis_net_tx_valid),
 
-    .s_axis_net_rx_0_tdata(s_axis_net_rx_data),
-    .s_axis_net_rx_0_tkeep(s_axis_net_rx_keep),
-    .s_axis_net_rx_0_tlast(s_axis_net_rx_last),
-    .s_axis_net_rx_0_tready(s_axis_net_rx_ready),
-    .s_axis_net_rx_0_tvalid(s_axis_net_rx_valid),
+    .s_axis_rx_tcp_0_tdata(s_axis_net_rx_data),
+    .s_axis_rx_tcp_0_tkeep(s_axis_net_rx_keep),
+    .s_axis_rx_tcp_0_tlast(s_axis_net_rx_last),
+    .s_axis_rx_tcp_0_tready(s_axis_net_rx_ready),
+    .s_axis_rx_tcp_0_tvalid(s_axis_net_rx_valid),
 
     .m_axis_net_tx_to_endpoint_0_data(m_axis_net_tx_to_endpoint_data),
     .m_axis_net_tx_to_endpoint_0_dest(m_axis_net_tx_to_endpoint_dest),

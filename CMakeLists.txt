@@ -111,7 +111,7 @@ add_custom_target(vivado_snic_project
    DEPENDS ${PROJECT_DEPENDS})
 
 add_custom_target(g
-   COMMAND ${VIVADO_BINARY} generated_standalone_tcp_project/generated_standalone_tcp.xpr)
+   COMMAND ${VIVADO_BINARY} generated_standalone_tcp_project/generated_standalone_tcp.xpr &)
 
 # add_custom_target(synthesize
 #    COMMAND ${VIVADO_BINARY} -mode batch -source ${CMAKE_BINARY_DIR}/run_synthesis.tcl

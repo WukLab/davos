@@ -126,18 +126,20 @@ snic_tcp_top_final DUT (
     .s_axis_rx_tcp_0_tready(s_axis_net_rx_ready),
     .s_axis_rx_tcp_0_tvalid(s_axis_net_rx_valid),
 
-    .m_axis_net_tx_to_endpoint_0_data(m_axis_net_tx_to_endpoint_data),
-    .m_axis_net_tx_to_endpoint_0_dest(m_axis_net_tx_to_endpoint_dest),
-    .m_axis_net_tx_to_endpoint_0_keep(m_axis_net_tx_to_endpoint_keep),
-    .m_axis_net_tx_to_endpoint_0_last(m_axis_net_tx_to_endpoint_last),
-    .m_axis_net_tx_to_endpoint_0_ready(m_axis_net_tx_to_endpoint_ready),
-    .m_axis_net_tx_to_endpoint_0_valid(m_axis_net_tx_to_endpoint_valid),
+    .m_axis_net_tx_to_endpoint_0_tdata(m_axis_net_tx_to_endpoint_data),
+    .m_axis_net_tx_to_endpoint_0_tdest(m_axis_net_tx_to_endpoint_dest),
+    .m_axis_net_tx_to_endpoint_0_tkeep(m_axis_net_tx_to_endpoint_keep),
+    .m_axis_net_tx_to_endpoint_0_tlast(m_axis_net_tx_to_endpoint_last),
+    .m_axis_net_tx_to_endpoint_0_tready(m_axis_net_tx_to_endpoint_ready),
+    .m_axis_net_tx_to_endpoint_0_tvalid(m_axis_net_tx_to_endpoint_valid),
+    .m_axis_net_tx_to_endpoint_0_tuser(),
 
-    .s_axis_net_rx_from_endpoint_0_data(s_axis_net_rx_from_endpoint_data),
-    .s_axis_net_rx_from_endpoint_0_keep(s_axis_net_rx_from_endpoint_keep),
-    .s_axis_net_rx_from_endpoint_0_last(s_axis_net_rx_from_endpoint_last),
-    .s_axis_net_rx_from_endpoint_0_ready(s_axis_net_rx_from_endpoint_ready),
-    .s_axis_net_rx_from_endpoint_0_valid(s_axis_net_rx_from_endpoint_valid)
+    .s_axis_net_rx_from_endpoint_0_tdata(s_axis_net_rx_from_endpoint_data),
+    .s_axis_net_rx_from_endpoint_0_tkeep(s_axis_net_rx_from_endpoint_keep),
+    .s_axis_net_rx_from_endpoint_0_tlast(s_axis_net_rx_from_endpoint_last),
+    .s_axis_net_rx_from_endpoint_0_tready(s_axis_net_rx_from_endpoint_ready),
+    .s_axis_net_rx_from_endpoint_0_tvalid(s_axis_net_rx_from_endpoint_valid),
+    .s_axis_net_rx_from_endpoint_0_tuser()
 );
 
 reg [63:0] send_start, send_end, receive_start, receive_end;
@@ -170,7 +172,7 @@ initial begin
 end
 
 always
-    #CLK_PERIOD clk_250mhz = ~clk_250mhz;
+    #(CLK_PERIOD/2) clk_250mhz = ~clk_250mhz;
 
 initial begin
 

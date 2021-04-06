@@ -14,6 +14,12 @@ make project_standalone_tcp        # build the combined vivado IP
 - To open Vivado GUI, run `make g` inside `build/`.
 - To open Vivado HLS GUI, go to `build/fpga-network-stack/hls/`.
 
+```
+write_bd_tcl  -force -bd_name snic_tcp_top_final ../scripts/create_bd.tcl
+set_property -dict [list CONFIG.FREQ_HZ {250000000}] [get_bd_pins snic_tcp_top_0/mem_clk]
+set_property -dict [list CONFIG.FREQ_HZ {250000000}] [get_bd_ports mem_clk_0]
+```
+
 ## About Vivado project
 
 The top HDL code is in `hdl/standalone_tcp`, which was a copy from `hdl/common`.

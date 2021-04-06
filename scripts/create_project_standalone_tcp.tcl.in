@@ -76,7 +76,9 @@ source ${CMAKE_CURRENT_SOURCE_DIR}/scripts/dram_${FPGA_FAMILY}.tcl
 #add_files $src_dir/role_wrapper.sv
 #source ${CMAKE_SOURCE_DIR}/scripts/${ROLE_NAME}.tcl
 
-ipx::package_project -root_dir "${CMAKE_SOURCE_DIR}/iprepo/snic_tcp"       -vendor wuklab.io -library user -taxonomy /UserIP -import_files -set_current false
+ipx::package_project -root_dir "${CMAKE_SOURCE_DIR}/iprepo/snic_tcp"   -vendor wuklab.io -library user -taxonomy /UserIP -import_files -set_current true -force
+#ipx::add_bus_parameter FREQ_HZ [ipx::get_bus_interfaces mem_clk -of_objects [ipx::current_core]]
+#set_property value 250 [ipx::get_bus_parameters FREQ_HZ -of_objects [ipx::get_bus_interfaces mem_clk -of_objects [ipx::current_core]]]
 update_ip_catalog
 
 source ${CMAKE_CURRENT_SOURCE_DIR}/scripts/create_bd.tcl

@@ -172,7 +172,7 @@ initial begin
 end
 
 always
-    #(CLK_PERIOD/2) clk_250mhz = ~clk_250mhz;
+    #CLK_PERIOD clk_250mhz = ~clk_250mhz;
 
 initial begin
 

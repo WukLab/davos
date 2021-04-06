@@ -194,7 +194,7 @@ proc create_root_design { parentCell } {
   set_property -dict [ list \
    CONFIG.ADDR_WIDTH {32} \
    CONFIG.DATA_WIDTH {512} \
-   CONFIG.FREQ_HZ {100000000} \
+   CONFIG.FREQ_HZ {250000000} \
    CONFIG.HAS_QOS {0} \
    CONFIG.HAS_REGION {0} \
    CONFIG.NUM_READ_OUTSTANDING {2} \
@@ -204,12 +204,12 @@ proc create_root_design { parentCell } {
 
   set m_axis_net_tx_to_endpoint_0 [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:axis_rtl:1.0 m_axis_net_tx_to_endpoint_0 ]
   set_property -dict [ list \
-   CONFIG.FREQ_HZ {100000000} \
+   CONFIG.FREQ_HZ {250000000} \
    ] $m_axis_net_tx_to_endpoint_0
 
   set m_axis_tx_tcp_0 [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:axis_rtl:1.0 m_axis_tx_tcp_0 ]
   set_property -dict [ list \
-   CONFIG.FREQ_HZ {100000000} \
+   CONFIG.FREQ_HZ {250000000} \
    ] $m_axis_tx_tcp_0
 
   set s_axi_0 [ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:aximm_rtl:1.0 s_axi_0 ]
@@ -219,7 +219,7 @@ proc create_root_design { parentCell } {
    CONFIG.AWUSER_WIDTH {0} \
    CONFIG.BUSER_WIDTH {0} \
    CONFIG.DATA_WIDTH {32} \
-   CONFIG.FREQ_HZ {100000000} \
+   CONFIG.FREQ_HZ {250000000} \
    CONFIG.HAS_BRESP {1} \
    CONFIG.HAS_BURST {1} \
    CONFIG.HAS_CACHE {0} \
@@ -246,7 +246,7 @@ proc create_root_design { parentCell } {
 
   set s_axis_net_rx_from_endpoint_0 [ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:axis_rtl:1.0 s_axis_net_rx_from_endpoint_0 ]
   set_property -dict [ list \
-   CONFIG.FREQ_HZ {100000000} \
+   CONFIG.FREQ_HZ {250000000} \
    CONFIG.HAS_TKEEP {1} \
    CONFIG.HAS_TLAST {1} \
    CONFIG.HAS_TREADY {1} \
@@ -260,7 +260,7 @@ proc create_root_design { parentCell } {
 
   set s_axis_rx_tcp_0 [ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:axis_rtl:1.0 s_axis_rx_tcp_0 ]
   set_property -dict [ list \
-   CONFIG.FREQ_HZ {100000000} \
+   CONFIG.FREQ_HZ {250000000} \
    CONFIG.HAS_TKEEP {1} \
    CONFIG.HAS_TLAST {1} \
    CONFIG.HAS_TREADY {1} \
@@ -275,13 +275,13 @@ proc create_root_design { parentCell } {
 
   # Create ports
   set mem_aresetn_0 [ create_bd_port -dir I -type rst mem_aresetn_0 ]
-  set mem_clk_0 [ create_bd_port -dir I -type clk -freq_hz 100000000 mem_clk_0 ]
+  set mem_clk_0 [ create_bd_port -dir I -type clk -freq_hz 250000000 mem_clk_0 ]
   set_property -dict [ list \
    CONFIG.ASSOCIATED_BUSIF {m_axi_0} \
    CONFIG.ASSOCIATED_RESET {mem_aresetn_0} \
  ] $mem_clk_0
   set net_aresetn_0 [ create_bd_port -dir I -type rst net_aresetn_0 ]
-  set net_clk_0 [ create_bd_port -dir I -type clk -freq_hz 100000000 net_clk_0 ]
+  set net_clk_0 [ create_bd_port -dir I -type clk -freq_hz 250000000 net_clk_0 ]
   set_property -dict [ list \
    CONFIG.ASSOCIATED_BUSIF {s_axis_rx_tcp_0:m_axis_tx_tcp_0:s_axi_0:s_axis_net_rx_from_endpoint_0:m_axis_net_tx_to_endpoint_0} \
    CONFIG.ASSOCIATED_RESET {net_aresetn_0} \
@@ -302,6 +302,8 @@ proc create_root_design { parentCell } {
    CONFIG.C_OPERATION {not} \
    CONFIG.LOGO_FILE {data/sym_notgate.png} \
  ] $util_vector_logic_0
+
+  set_property -dict [list CONFIG.FREQ_HZ {250000000}] [get_bd_intf_pins snic_tcp_top_0/m_axi]
 
   # Create interface connections
   connect_bd_intf_net -intf_net TcpWrapper_0_fromTCP_out [get_bd_intf_ports m_axis_tx_tcp_0] [get_bd_intf_pins TcpWrapper_0/fromTCP_out]

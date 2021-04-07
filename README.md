@@ -16,8 +16,7 @@ make project_standalone_tcp        # build the combined vivado IP
 
 ```
 write_bd_tcl  -force -bd_name snic_tcp_top_final ../scripts/create_bd.tcl
-set_property -dict [list CONFIG.FREQ_HZ {250000000}] [get_bd_pins snic_tcp_top_0/mem_clk]
-set_property -dict [list CONFIG.FREQ_HZ {250000000}] [get_bd_ports mem_clk_0]
+ipx::package_project -root_dir "../iprepo/snic_top_final" -vendor wuklab.io -library user -taxonomy /UserIP -module snic_tcp_top_final -import_files
 ```
 
 ## About Vivado project

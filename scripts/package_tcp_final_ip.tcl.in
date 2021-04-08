@@ -1,0 +1,1 @@
+ipx::package_project -root_dir "${CMAKE_SOURCE_DIR}/iprepo/snic_top_final" -vendor wuklab.io -library user -taxonomy /UserIP -module snic_tcp_top_final -import_files

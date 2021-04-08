@@ -58,7 +58,9 @@ module snic_tcp_top #(
     input wire [511:0]                              m_axi_rdata [NUM_DDR_CHANNELS-1:0],
     input wire [1:0]                                m_axi_rresp [NUM_DDR_CHANNELS-1:0],
     input wire[NUM_DDR_CHANNELS-1:0]                m_axi_rlast,
-    input wire[NUM_DDR_CHANNELS-1:0]                m_axi_rvalid
+    input wire[NUM_DDR_CHANNELS-1:0]                m_axi_rvalid,
+    
+    input wire[31:0]    local_ip_address
 );
 
 // Memory Signals
@@ -153,7 +155,9 @@ network_stack #(
 
     .s_axis_tx_metadata(axis_tcp_tx_metadata),
     .s_axis_tx_data(axis_tcp_tx_data),
-    .m_axis_tx_status(axis_tcp_tx_status)
+    .m_axis_tx_status(axis_tcp_tx_status),
+    
+    .local_ip_address(local_ip_address)
 );
 
 /*

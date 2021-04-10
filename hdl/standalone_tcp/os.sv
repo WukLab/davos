@@ -81,7 +81,7 @@ axis_mem_status axis_tcp_mem_write_status[NUM_TCP_CHANNELS]();
 
 axis_meta #(.WIDTH(16))     axis_tcp_listen_port();
 axis_meta #(.WIDTH(8))      axis_tcp_listen_port_status();
-axis_meta #(.WIDTH(48))     axis_tcp_open_connection();
+axis_meta #(.WIDTH(64))     axis_tcp_open_connection();
 axis_meta #(.WIDTH(24))     axis_tcp_open_status();
 axis_meta #(.WIDTH(16))     axis_tcp_close_connection();
 axis_meta #(.WIDTH(88))     axis_tcp_notification();

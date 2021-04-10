@@ -316,6 +316,7 @@ proc create_root_design { parentCell } {
   connect_bd_intf_net -intf_net snic_tcp_wrapper_0_m_axis_fromtcp_out [get_bd_intf_pins TcpWrapper_0/fromTCP_in] [get_bd_intf_pins snic_tcp_wrapper_0/m_axis_fromtcp_out]
 
   # Create port connections
+  connect_bd_net -net TcpWrapper_0_local_ip_address [get_bd_pins TcpWrapper_0/local_ip_address] [get_bd_pins snic_tcp_top_0/local_ip_address]
   connect_bd_net -net TcpWrapper_0_rxFromEndpoint_out_tdata [get_bd_pins TcpWrapper_0/rxFromEndpoint_out_tdata] [get_bd_pins snic_tcp_top_0/s_axis_net_rx_from_endpoint_data]
   connect_bd_net -net TcpWrapper_0_rxFromEndpoint_out_tkeep [get_bd_pins TcpWrapper_0/rxFromEndpoint_out_tkeep] [get_bd_pins snic_tcp_top_0/s_axis_net_rx_from_endpoint_keep]
   connect_bd_net -net TcpWrapper_0_rxFromEndpoint_out_tlast [get_bd_pins TcpWrapper_0/rxFromEndpoint_out_tlast] [get_bd_pins snic_tcp_top_0/s_axis_net_rx_from_endpoint_last]
@@ -352,6 +353,7 @@ proc create_root_design { parentCell } {
   # Restore current instance
   current_bd_instance $oldCurInst
 
+  validate_bd_design
   save_bd_design
 }
 # End of create_root_design()
